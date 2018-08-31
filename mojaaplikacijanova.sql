@@ -132,7 +132,10 @@ CREATE TABLE `karton` (
 
 insert  into `karton`(`brojUnosa`,`kartonID`,`brojKartona`,`kandidatID`,`sifraPrijave`,`rezultatTesta`,`brojGrupe`) values 
 (1,1,12345,'1705995887796','1',57,'1225'),
-(2,22,12345,'1705995887796','1',57,'1225');
+(2,22,12345,'1705995887796','1',57,'1225'),
+(1,23,55545,NULL,NULL,NULL,'1225'),
+(1,24,484,NULL,NULL,NULL,'1225'),
+(1,25,555,NULL,NULL,NULL,'1225');
 
 /*Table structure for table `komisija` */
 
@@ -350,10 +353,74 @@ CREATE TABLE `zadatak` (
   `kartonID` int(11) NOT NULL,
   `rbZadatka` int(11) DEFAULT NULL,
   `odgovor` char(1) DEFAULT NULL,
-  PRIMARY KEY (`kartonID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `zadatakID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`kartonID`,`zadatakID`),
+  KEY `zadatakID` (`zadatakID`)
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
 
 /*Data for the table `zadatak` */
+
+insert  into `zadatak`(`kartonID`,`rbZadatka`,`odgovor`,`zadatakID`) values 
+(23,1,'a',1),
+(23,2,'b',2),
+(23,3,'c',3),
+(23,4,'d',4),
+(23,5,'e',5),
+(23,6,'a',6),
+(23,7,'b',7),
+(23,8,'c',8),
+(23,9,'d',9),
+(23,10,'e',10),
+(23,11,'a',11),
+(23,12,'b',12),
+(23,13,'c',13),
+(23,14,'d',14),
+(23,15,'e',15),
+(23,16,'a',16),
+(23,17,'b',17),
+(23,18,'c',18),
+(23,19,'d',19),
+(23,20,'a',20),
+(24,1,'A',21),
+(24,2,'B',22),
+(24,3,'C',23),
+(24,4,'D',24),
+(24,5,'E',25),
+(24,6,'N',26),
+(24,7,'C',27),
+(24,8,'D',28),
+(24,9,'A',29),
+(24,10,'A',30),
+(24,11,'B',31),
+(24,12,'C',32),
+(24,13,'D',33),
+(24,14,'A',34),
+(24,15,'C',35),
+(24,16,'C',36),
+(24,17,'A',37),
+(24,18,'A',38),
+(24,19,'A',39),
+(24,20,'A',40),
+(25,1,'A',41),
+(25,2,'B',42),
+(25,3,'C',43),
+(25,4,'D',44),
+(25,5,'E',45),
+(25,6,'A',46),
+(25,7,'E',47),
+(25,8,'E',48),
+(25,9,'A',49),
+(25,10,'A',50),
+(25,11,'A',51),
+(25,12,'A',52),
+(25,13,'A',53),
+(25,14,'B',54),
+(25,15,'C',55),
+(25,16,'D',56),
+(25,17,'E',57),
+(25,18,'A',58),
+(25,19,'B',59),
+(25,20,'C',60);
 
 /*Table structure for table `zanimanjeroditelja` */
 
