@@ -17,6 +17,7 @@ import domen.Resenje;
 import domen.Sluzbenik;
 import domen.SrednjaSkola;
 import domen.Test;
+import domen.Zadatak;
 import domen.ZanimanjeRoditelja;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -425,6 +426,10 @@ public class Kontroler {
             db.ucitajDriver();
             db.otvoriKonekciju();
             db.sacuvajKarton(karton);
+            ArrayList<Zadatak> lz = karton.getListaOdg();
+            for (Zadatak zadatak : lz) {
+                db.sacuvajODG(zadatak,karton);
+            }
             db.commit();
             ubacen = true;
         } catch (ClassNotFoundException ex) {

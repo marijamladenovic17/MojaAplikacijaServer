@@ -15,6 +15,7 @@ import domen.Nacionalnost;
 import domen.Resenje;
 import domen.SrednjaSkola;
 import domen.Test;
+import domen.Zadatak;
 import domen.ZanimanjeRoditelja;
 import java.io.IOException;
 import java.sql.Array;
@@ -309,7 +310,7 @@ public class DBBroker {
         while (rs.next()) {
             b = rs.getInt(1);
         }
-        return ++b;
+        return b+1;
     }
 
     public ArrayList<GrupaZadatka> vratiGZ() throws SQLException {
@@ -392,16 +393,13 @@ public class DBBroker {
     }
 
     public void sacuvajKarton(Karton karton) throws SQLException {
-       String upit = "INSERT INTO karton(brojUnosa,kartonID,brojKartona,kandidatID,sifraPrijave,rezultatTesta,brojGrupe) VALUES(?,?,?,?,?,?,?)";
+       String upit = "INSERT INTO karton(brojUnosa,kartonID,brojKartona,brojGrupe) VALUES(?,?,?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
 
         ps.setInt(1, karton.getBrUnosa());
         ps.setInt(2, karton.getKartonID());
         ps.setInt(3, karton.getBrKartona());
-        ps.setString(4, karton.getKandidat().getJmbg());
-        ps.setString(5, karton.getSifraPrijave());
-        ps.setDouble(6, karton.getRezultatTesta());
-        ps.setInt(7, karton.getGrupaZadataka().getBrGrupe());
+        ps.setInt(4, karton.getGrupaZadataka().getBrGrupe());
         
 
         ps.executeUpdate();
@@ -417,6 +415,16 @@ public class DBBroker {
             b = rs.getInt(1);
         }
         return ++b;
+    }
+
+    public void sacuvajODG(Zadatak zadatak,Karton k) throws SQLException {
+        String upit = "INSERT INTO zadatak(kartonID,rbZadatka,odgovor) VALUES(?,?,?)";
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.setInt(1, k.getKartonID());
+        ps.setInt(2, zadatak.getRbZadatka());
+        ps.setString(3, zadatak.getOdgovor()+"");
+        ps.executeUpdate();
+        ps.close();
     }
     
 

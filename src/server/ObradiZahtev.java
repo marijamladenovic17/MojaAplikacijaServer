@@ -9,6 +9,7 @@ import domen.Clan;
 import domen.Drzevljanstvo;
 import domen.GrupaZadatka;
 import domen.Kandidat;
+import domen.Karton;
 import domen.Komisija;
 import domen.Nacionalnost;
 import domen.SrednjaSkola;
@@ -186,6 +187,18 @@ public class ObradiZahtev extends Thread {
                      case Operacije.VRATI_GRUPU_ZADATKA:
                      ArrayList<GrupaZadatka> listGZ = Kontroler.getInstance().vratiGrupuZadataka();
                     so.setOdgovor(listGZ);
+
+                    break;
+                    case Operacije.SACUVAJ_KARTON:
+                        Karton k = (Karton) kz.getParametar();
+                    boolean sacuvaj3 = Kontroler.getInstance().unesiKarton(k);
+                    if (sacuvaj3) {
+                        so.setPoruka("Uspesno ubacen karton!");
+                        so.setOdgovor("!");
+                    } else {
+                        so.setPoruka("Neuspesno  ubacen karton!");
+                        so.setOdgovor("!!");
+                    }
 
                     break;
 
