@@ -491,4 +491,26 @@ public class Kontroler {
         return br;
     }
 
+    public Karton vratiKarton(int kartBroj) {
+        Karton kart = null;
+
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kart = db.vratiKarton(kartBroj);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return kart;
+    }
+
 }

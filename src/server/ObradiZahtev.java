@@ -201,6 +201,12 @@ public class ObradiZahtev extends Thread {
                     }
 
                     break;
+                    
+                    case Operacije.VRATI_KARTON:
+                        int kartBroj = (int) kz.getParametar();
+                        Karton karton = Kontroler.getInstance().vratiKarton(kartBroj);
+                        so.setOdgovor(karton);
+                        break;
 
             }
             posaljiSO(so);
