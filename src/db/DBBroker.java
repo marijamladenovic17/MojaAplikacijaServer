@@ -482,5 +482,12 @@ public class DBBroker {
        s.executeUpdate(upit);
        
     }
+    
+    
+    public void izmeniZadatak(Zadatak zadatak, int kartID) throws SQLException {
+        String upit = "UPDATE zadatak SET odgovor = '"+zadatak.getOdgovor()+"' WHERE kartonID = "+kartID+" AND rbZadatka ="+ zadatak.getRbZadatka();
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.executeUpdate();
+    }
 
 }

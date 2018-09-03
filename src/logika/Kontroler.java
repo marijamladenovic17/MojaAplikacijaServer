@@ -13,6 +13,7 @@ import domen.Kandidat;
 import domen.Karton;
 import domen.Komisija;
 import domen.Nacionalnost;
+import domen.PomocIzmena;
 import domen.Resenje;
 import domen.Sluzbenik;
 import domen.SrednjaSkola;
@@ -583,6 +584,44 @@ public class Kontroler {
         }
        return s;
        
+    }
+
+    public boolean izmeniZadatke(PomocIzmena pi) {
+        boolean izmenjen = false;
+        
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            ArrayList<Zadatak> zadaciZaIzmenu = pi.getZadaciZaIzmenu();
+            for (Zadatak zadatak : zadaciZaIzmenu) {
+                db.izmeniZadatak(zadatak, pi.getKratonId());
+            }
+            db.commit();
+            izmenjen = true;
+            
+        } catch (ClassNotFoundException ex) {
+            try {
+                db.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            try {
+                db.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return izmenjen;
     }
 
 }

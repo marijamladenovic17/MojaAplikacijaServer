@@ -12,6 +12,7 @@ import domen.Kandidat;
 import domen.Karton;
 import domen.Komisija;
 import domen.Nacionalnost;
+import domen.PomocIzmena;
 import domen.SrednjaSkola;
 import domen.Test;
 import domen.ZanimanjeRoditelja;
@@ -246,6 +247,20 @@ public class ObradiZahtev extends Thread {
                         so.setPoruka("Karton nije izmenjen!");
                     }
                     break;
+                    
+                    
+                    case Operacije.IZMENI_ZADATKE:
+                        PomocIzmena pi = (PomocIzmena) kz.getParametar();
+                        boolean uspesnoIzmenjeno = Kontroler.getInstance().izmeniZadatke(pi);
+                        if (uspesnoIzmenjeno) {
+                        so.setPoruka("Uspesno izmenjeni zadaci!");
+                        so.setOdgovor("!");
+                    } else {
+                        so.setPoruka("Neuspesno  izmenjeni zadaci!");
+                        so.setOdgovor("!!");
+                    }
+                       break;
+                    
 
             }
             posaljiSO(so);
