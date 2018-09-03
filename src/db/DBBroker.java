@@ -490,4 +490,21 @@ public class DBBroker {
         ps.executeUpdate();
     }
 
+    public ArrayList<Karton> vratiKartone() throws SQLException {
+        ArrayList<Karton> kartoni = new ArrayList<>();
+        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while (rs.next()) {
+            Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
+            GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
+            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
+            int kID = kart.getKartonID();
+            ArrayList<Zadatak> zadaci = vratiZadatke(kID);
+            kart.setListaOdg(zadaci);
+            kartoni.add(kart);
+        }
+        return kartoni;
+    }
+
 }

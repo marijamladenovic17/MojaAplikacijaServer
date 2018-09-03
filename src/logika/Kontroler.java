@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import transfer.ServerskiOdgovor;
 
 /**
  *
@@ -622,6 +623,57 @@ public class Kontroler {
         }
         
         return izmenjen;
+    }
+
+    public ServerskiOdgovor spojKartone() {
+        ServerskiOdgovor so = new ServerskiOdgovor();
+        String loseUneseni = "";
+        boolean imaLosih = false;
+        
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            ArrayList<Karton> kartoni = db.vratiKartone();
+            int ukupanBrojKartona = kartoni.size();
+            for(int i = 0; i<ukupanBrojKartona; i++){
+                Karton kart1 = kartoni.get(i);
+                for(int j = i+1; j<ukupanBrojKartona; j++){
+                    Karton kart2 = kartoni.get(j);
+                    if(kart1.getBrKartona() == kart2.getBrKartona()){
+                        int brojOdgovora = kart1.getListaOdg().size();
+                        ArrayList<Zadatak> odgovori1 = kart1.getListaOdg();
+                        ArrayList<Zadatak> odgovori2 = kart2.getListaOdg();
+                        for(int m = 0; m<brojOdgovora; m++){
+                            if(odgovori1.get(m).getOdgovor() != odgovori2.get(m).getOdgovor()){
+                                loseUneseni = loseUneseni + kart1.getBrKartona()+" ";
+                                imaLosih = true;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            if(imaLosih){
+                so.setPoruka("Spajanje kartona zavrseno. Lose uneseni kartoni: " + loseUneseni);
+            }else{
+                so.setPoruka("Spajanje kartona zavrseno. Nema lose unesenih. ");
+            }
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return so;
     }
 
 }

@@ -260,7 +260,11 @@ public class ObradiZahtev extends Thread {
                         so.setOdgovor("!!");
                     }
                        break;
-                    
+                       
+                    case Operacije.SPOJ_KARTONE:
+                        
+                        so = Kontroler.getInstance().spojKartone();
+                    break;
 
             }
             posaljiSO(so);
