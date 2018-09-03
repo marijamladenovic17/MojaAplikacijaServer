@@ -265,6 +265,18 @@ public class ObradiZahtev extends Thread {
                         
                         so = Kontroler.getInstance().spojKartone();
                     break;
+                    
+                case Operacije.VRATI_KARTONE_PROVERA:
+                    int kartonskiBroj = (int) kz.getParametar();
+                    ArrayList<Karton> kartoniProvera = Kontroler.getInstance().vratiKartoneYaProveru(kartonskiBroj);
+                    if (kartoniProvera == null) {
+                        so.setPoruka("Karton nije pronadjen pod zadatom sifrom!");
+                    } else {
+                        so.setPoruka("Karton je pronadjen pod zadatom sifrom!");
+                        so.setOdgovor(kartoniProvera);
+
+                    }
+                    break;
 
             }
             posaljiSO(so);
