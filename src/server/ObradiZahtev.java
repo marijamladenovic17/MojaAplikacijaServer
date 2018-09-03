@@ -49,7 +49,7 @@ public class ObradiZahtev extends Thread {
                 case Operacije.DA_LI_JE_REGISTROVAN_SLUZBENIK:
 
                     String[] niz = (String[]) kz.getParametar();
-                    
+
                     boolean postoji = Kontroler.getInstance().proveriSluzbenika(niz[0], niz[1]);
                     if (postoji) {
                         so.setPoruka("Uspesno ulogovani korisnik!");
@@ -161,7 +161,7 @@ public class ObradiZahtev extends Thread {
 
                     String[] niz1 = (String[]) kz.getParametar();
                     boolean daLiPostojiUBazi1 = Kontroler.getInstance().proveriKomisiju(niz1[0], niz1[1]);
-                    
+
                     if (daLiPostojiUBazi1) {
                         so.setPoruka("Uspesno ulogovana komisija!");
                         so.setOdgovor(true);
@@ -172,25 +172,25 @@ public class ObradiZahtev extends Thread {
                     }
 
                     break;
-                    case Operacije.DA_LI_POSTOJI_KOMISIJA:
+                case Operacije.DA_LI_POSTOJI_KOMISIJA:
 
                     ArrayList<Komisija> komisije = Kontroler.getInstance().vratiSveKomisije();
                     so.setOdgovor(komisije);
 
                     break;
-                     case Operacije.VRATI_MAX_ID_KARTONA:
+                case Operacije.VRATI_MAX_ID_KARTONA:
 
                     int broj = Kontroler.getInstance().vratiMaxIdKartona();
                     so.setOdgovor(broj);
 
                     break;
-                     case Operacije.VRATI_GRUPU_ZADATKA:
-                     ArrayList<GrupaZadatka> listGZ = Kontroler.getInstance().vratiGrupuZadataka();
+                case Operacije.VRATI_GRUPU_ZADATKA:
+                    ArrayList<GrupaZadatka> listGZ = Kontroler.getInstance().vratiGrupuZadataka();
                     so.setOdgovor(listGZ);
 
                     break;
-                    case Operacije.SACUVAJ_KARTON:
-                        Karton k = (Karton) kz.getParametar();
+                case Operacije.SACUVAJ_KARTON:
+                    Karton k = (Karton) kz.getParametar();
                     boolean sacuvaj3 = Kontroler.getInstance().unesiKarton(k);
                     if (sacuvaj3) {
                         so.setPoruka("Uspesno ubacen karton!");
@@ -201,12 +201,51 @@ public class ObradiZahtev extends Thread {
                     }
 
                     break;
-                    
-                    case Operacije.VRATI_KARTON:
-                        int kartBroj = (int) kz.getParametar();
-                        Karton karton = Kontroler.getInstance().vratiKarton(kartBroj);
+
+                case Operacije.VRATI_KARTON:
+                    int kartBroj = (int) kz.getParametar();
+                    Karton karton = Kontroler.getInstance().vratiKarton(kartBroj);
+                    if (karton == null) {
+                        so.setPoruka("Karton nije pronadjen pod zadatom sifrom!");
+                    } else {
+                        so.setPoruka("Karton je pronadjen pod zadatom sifrom!");
                         so.setOdgovor(karton);
-                        break;
+
+                    }
+                    break;
+                case Operacije.VRATI_KARTON_UNOS_1:
+                    int kartBroj1 = (int) kz.getParametar();
+                    Karton karton1 = Kontroler.getInstance().vratiKartonUnosJedan(kartBroj1);
+                    if (karton1 == null) {
+                        so.setPoruka("Karton nije pronadjen pod zadatom sifrom! ");
+                    } else {
+                        so.setPoruka("Karton je pronadjen pod zadatom sifrom! - Unos prvi");
+                        so.setOdgovor(karton1);
+
+                    }
+                    break;
+                case Operacije.VRATI_KANDIDATA:
+                    String kanBroj = (String) kz.getParametar();
+                    Kandidat kandidat = Kontroler.getInstance().vratiKandidata(kanBroj);
+                    if (kandidat != null) {
+
+                        so.setPoruka("Kandidat je pronadjen pod zadatom sifrom prijave!");
+                        so.setOdgovor(kandidat);
+                        System.out.println(kandidat.getIme());
+                    } else {
+                        so.setPoruka("Kandidat nije pronadjen pod zadatom sifrom! ");
+
+                    }
+                    break;
+                case Operacije.SACUVAJ_KARTON_VERIFIKACIJA:
+                    Karton kaa = (Karton) kz.getParametar();
+                    boolean sacuvao_kar=Kontroler.getInstance().promeniKarton(kaa);
+                    if (sacuvao_kar) {
+                        so.setPoruka("Karton je izmenjen ");
+                    } else {
+                        so.setPoruka("Karton nije izmenjen!");
+                    }
+                    break;
 
             }
             posaljiSO(so);

@@ -367,7 +367,7 @@ public class DBBroker {
     }
 
     public Kandidat vratiKandidata(String brojPrijave) throws SQLException {
-      String upit = "SELECT * from kandidat WHERE sifraPrijave="+brojPrijave;
+      String upit = "SELECT * from kandidat WHERE sifraPrijave='"+brojPrijave+"'";
       Kandidat k = new Kandidat();
        Statement s = konekcija.createStatement();
        ResultSet rs = s.executeQuery(upit);
@@ -435,7 +435,7 @@ public class DBBroker {
         while (rs.next()) {
             Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
-            kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona") , null, rs.getInt("brojUnosa"), gz, null);
+            kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
             int kID = kart.getKartonID();
             ArrayList<Zadatak> zadaci = vratiZadatke(kID);
             kart.setListaOdg(zadaci);
@@ -458,6 +458,29 @@ public class DBBroker {
         
         return zadaci;
     }
-    
+     public Karton vratiKartonUnosPrvi(int kartBroj) throws SQLException {
+        Karton kart = null;
+        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID WHERE k.brojKartona = " + kartBroj+" AND brojUnosa=1 LIMIT 1";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while (rs.next()) {
+            Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
+            GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
+            kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona") , rs.getInt("brojUnosa"), gz, null);
+            int kID = kart.getKartonID();
+            ArrayList<Zadatak> zadaci = vratiZadatke(kID);
+            kart.setListaOdg(zadaci);
+            return kart;
+        }
+        
+        return kart;
+    }
+
+    public void izmeniKarton(Karton kaa) throws SQLException {
+       String upit = "UPDATE karton SET kandidatID='"+kaa.getKandidat().getJmbg()+"' WHERE kartonID="+kaa.getKartonID();
+       Statement s = konekcija.createStatement();
+       s.executeUpdate(upit);
+       
+    }
 
 }
