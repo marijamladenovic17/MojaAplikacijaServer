@@ -277,6 +277,12 @@ public class ObradiZahtev extends Thread {
 
                     }
                     break;
+                    
+                       
+                    case Operacije.IZRACUNAJ_POENE:
+                        
+                        so = Kontroler.getInstance().izracunajPoene();
+                    break;
 
             }
             posaljiSO(so);

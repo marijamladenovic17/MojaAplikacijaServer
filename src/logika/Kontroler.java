@@ -698,4 +698,67 @@ public class Kontroler {
         return kartoni;
     }
 
+    public ServerskiOdgovor izracunajPoene() {
+        ServerskiOdgovor so = new ServerskiOdgovor();
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            ArrayList<Karton> kartoni = db.vratiKartoneZaPoene();
+            ArrayList<Karton> prviUnos = new ArrayList<>();
+            for (Karton karton : kartoni) {
+                if(karton.getBrUnosa()==1){
+                    prviUnos.add(karton);
+                }
+            }
+            
+            for (Karton kart : prviUnos) {
+                double suma = 0;
+                int brojac = kart.getListaOdg().size();
+                ArrayList<Resenje> resenja = (ArrayList<Resenje>) kart.getGrupaZadataka().getListaResenihZadataka();
+                ArrayList<Zadatak> zadaci = kart.getListaOdg();
+                for (int i = 0; i < brojac; i++) {
+                    char res = resenja.get(i).getOdgovor();
+                    char zad = zadaci.get(i).getOdgovor();
+                    if(zad == res){
+                        suma+=5;
+                    }else{
+                        if(zad == 'N'){
+                            suma+=0;
+                        }else{
+                            suma-=3;
+                        }
+                    }
+                }
+                
+                db.upisiRezultat(kart.getKartonID(),suma);
+            }
+            db.commit();
+            so.setPoruka("Uspesno izracunati poeni");
+            
+        } catch (ClassNotFoundException ex) {
+            try {
+                db.rollback();
+            so.setPoruka("Doslo je do greske");
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+             try {
+                db.rollback();
+            so.setPoruka("Doslo je do greske");
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return so;
+    }
+
 }

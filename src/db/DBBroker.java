@@ -525,4 +525,43 @@ public class DBBroker {
         return kartoni;
     }
 
+    public ArrayList<Karton> vratiKartoneZaPoene() throws SQLException {
+        ArrayList<Karton> kartoni = new ArrayList<>();
+        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while (rs.next()) {
+            Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
+            int brojG = rs.getInt("g.brojGrupe");
+            ArrayList<Resenje> resenja = vratiResenjaGrupe(brojG);
+            GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), resenja, t);
+            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
+            int kID = kart.getKartonID();
+            ArrayList<Zadatak> zadaci = vratiZadatke(kID);
+            kart.setListaOdg(zadaci);
+            kartoni.add(kart);
+        }
+        
+        return kartoni;
+    }
+
+    private ArrayList<Resenje> vratiResenjaGrupe(int aInt) throws SQLException {
+        ArrayList<Resenje> resenja = new ArrayList<>();
+        String upit = "select * from resenje where brojGrupe =" + aInt;
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while(rs.next()){
+            Resenje r = new Resenje(rs.getInt("rbZadatka"), rs.getString("odgovor").charAt(0));
+            resenja.add(r);
+        }
+        
+        return resenja;
+    }
+
+    public void upisiRezultat(int kartonID, double suma) throws SQLException {
+        String upit = "UPDATE karton SET rezultatTesta ="+suma+" WHERE kartonID= "+kartonID+" AND brojUnosa = 1";
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.executeUpdate();
+    }
+
 }
