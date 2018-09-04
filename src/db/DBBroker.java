@@ -368,7 +368,7 @@ public class DBBroker {
 
     public Kandidat vratiKandidata(String brojPrijave) throws SQLException {
       String upit = "SELECT * from kandidat WHERE sifraPrijave='"+brojPrijave+"'";
-      Kandidat k = new Kandidat();
+      Kandidat k = null;
        Statement s = konekcija.createStatement();
        ResultSet rs = s.executeQuery(upit);
        while(rs.next()){
