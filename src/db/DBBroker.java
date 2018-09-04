@@ -380,6 +380,7 @@ public class DBBroker {
            String pol =rs.getString(6);
            String mobilni =rs.getString(7);
            String fiksni =rs.getString(8);
+           k= new Kandidat();
            k.setIme(ime);
            k.setPrezime(prezime);
            k.setSifraPrijave(brojPrijave);

@@ -106,8 +106,12 @@ CREATE TABLE `kandidat` (
 /*Data for the table `kandidat` */
 
 insert  into `kandidat`(`prezime`,`sifraPrijave`,`jmbg`,`imeRoditelja`,`ime`,`pol`,`mobilni`,`fiksni`,`drzevljanstvoID`,`sifraZanimanjaRoditelja`,`sifraSS`,`nacionalnostID`) values 
+('fkijergr','665','1012199525264','jrker','grejigj','Muski','065-6592358','017/8989898',1,100,200,300),
+('mkffdv','454','1212455666666','vdjikg','rejgijvfa','Zenski','065-89856265','017/8959562',1,100,200,300),
+('Markovic','44','1512200056565','Marina','Marko','Muski','+999026556523','+9990658569',1,100,200,300),
 ('Nerandzic','254','1512356565852','Jovan','Jovana','Zenski','065-4444444','017/5485625',2,101,201,301),
-('Mladenovic','1','1705995887796','Bora','Marija','Zenski','064-77845230','018/55426',1,100,200,300);
+('Mladenovic','1','1705995887796','Bora','Marija','Zenski','064-77845230','018/55426',1,100,200,300),
+('Saric','545','2105444444444','Aleksandar','Aleksa','Muski','065-56985652','017/2625262',1,100,200,300);
 
 /*Table structure for table `karton` */
 
@@ -118,7 +122,6 @@ CREATE TABLE `karton` (
   `kartonID` int(11) NOT NULL,
   `brojKartona` int(11) DEFAULT NULL,
   `kandidatID` varchar(255) DEFAULT NULL,
-  `sifraPrijave` varchar(255) DEFAULT NULL,
   `rezultatTesta` double DEFAULT NULL,
   `brojGrupe` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`kartonID`),
@@ -130,12 +133,10 @@ CREATE TABLE `karton` (
 
 /*Data for the table `karton` */
 
-insert  into `karton`(`brojUnosa`,`kartonID`,`brojKartona`,`kandidatID`,`sifraPrijave`,`rezultatTesta`,`brojGrupe`) values 
-(1,1,12345,'1705995887796','1',57,'1225'),
-(2,22,12345,'1705995887796','1',57,'1225'),
-(1,23,55545,NULL,NULL,NULL,'1225'),
-(1,24,484,NULL,NULL,NULL,'1225'),
-(1,25,555,NULL,NULL,NULL,'1225');
+insert  into `karton`(`brojUnosa`,`kartonID`,`brojKartona`,`kandidatID`,`rezultatTesta`,`brojGrupe`) values 
+(1,23,55545,NULL,NULL,'1225'),
+(1,24,484,'1705995887796',NULL,'1225'),
+(1,25,555,NULL,NULL,'1225');
 
 /*Table structure for table `komisija` */
 
@@ -155,7 +156,7 @@ CREATE TABLE `komisija` (
 
 insert  into `komisija`(`komisijaID`,`user`,`password`,`clan1`,`clan2`,`clan3`) values 
 (111,'komisija1','prvakomisija',1,5,3),
-(112,'komisija2','drugakomisija',6,1,2),
+(112,'komisija2','drugakomisija',6,2,3),
 (113,'komisija3','trecakomisija',4,6,3);
 
 /*Table structure for table `nacionalnost` */
