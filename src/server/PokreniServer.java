@@ -29,15 +29,18 @@ public class PokreniServer extends Thread{
     public void run() {
         try {
             ServerSocket ss = new ServerSocket(9000);
-            System.out.println("Povezan!");
-            while (true) {                
-                Socket soket = ss.accept();
-                System.out.println("Povezan klijent!");
-                ObradiZahtev oz = new ObradiZahtev(soket);
-                oz.start();
+            fs.serverPokrenut();
+            NitZatvaranje nz = new NitZatvaranje(ss, this);
+            nz.start();
+            while (!isInterrupted()) {                
+                
+            Socket soket = ss.accept();
+            System.out.println("Klijent se povezao");
+            ObradiZahtev oz = new ObradiZahtev(soket);
+            oz.start();
             }
         } catch (IOException ex) {
-            Logger.getLogger(PokreniServer.class.getName()).log(Level.SEVERE, null, ex);
+            fs.serverNijePokrenut();
         }
     }
 

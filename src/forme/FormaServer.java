@@ -13,6 +13,7 @@ import server.PokreniServer;
  * @author PC
  */
 public class FormaServer extends javax.swing.JFrame {
+    PokreniServer ps;
 
     /**
      * Creates new form FormaServer
@@ -23,8 +24,7 @@ public class FormaServer extends javax.swing.JFrame {
         int x = (int) tk.getScreenSize().getWidth();
         int y = (int) tk.getScreenSize().getHeight();
         setSize(x, y);
-        PokreniServer ps = new PokreniServer(this);
-        ps.start();
+        btnZaustaviServer.setEnabled(false);
     }
 
     /**
@@ -37,21 +37,53 @@ public class FormaServer extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        btnPokreniServer = new javax.swing.JButton();
+        txtStatus = new javax.swing.JTextField();
+        btnZaustaviServer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("SERVER"));
 
+        btnPokreniServer.setText("Pokreni server");
+        btnPokreniServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPokreniServerActionPerformed(evt);
+            }
+        });
+
+        txtStatus.setEditable(false);
+
+        btnZaustaviServer.setText("Zaustavi server");
+        btnZaustaviServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZaustaviServerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(btnPokreniServer)
+                .addGap(58, 58, 58)
+                .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
+                .addComponent(btnZaustaviServer)
+                .addContainerGap(114, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPokreniServer)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnZaustaviServer))
+                .addContainerGap(355, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -67,6 +99,18 @@ public class FormaServer extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPokreniServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPokreniServerActionPerformed
+        // TODO add your handling code here:
+        ps = new PokreniServer(this);
+        ps.start();
+        
+    }//GEN-LAST:event_btnPokreniServerActionPerformed
+
+    private void btnZaustaviServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZaustaviServerActionPerformed
+        // TODO add your handling code here:
+        ps.interrupt();
+    }//GEN-LAST:event_btnZaustaviServerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -104,6 +148,21 @@ public class FormaServer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPokreniServer;
+    private javax.swing.JButton btnZaustaviServer;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
+
+    public void serverPokrenut() {
+        txtStatus.setText("Server je pokrenut!");
+        btnPokreniServer.setEnabled(false);
+        btnZaustaviServer.setEnabled(true);
+    }
+
+    public void serverNijePokrenut() {
+        txtStatus.setText("Server nije pokrenut!");
+        btnPokreniServer.setEnabled(true);
+        btnZaustaviServer.setEnabled(false);
+    }
 }

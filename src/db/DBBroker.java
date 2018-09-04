@@ -87,16 +87,7 @@ public class DBBroker {
             int komid = rs.getInt("komisijaID");
             String user = rs.getString("user");
             String pass = rs.getString("password");
-            int c1 = rs.getInt("clan1");
-            int c2 = rs.getInt("clan2");
-            int c3 = rs.getInt("clan3");
-            Clan clan1 = vratiClan(c1);
-            Clan clan2 = vratiClan(c2);
-            Clan clan3 = vratiClan(c3);
-            ArrayList<Clan> cla = new ArrayList<>();
-            cla.add(clan1);
-            cla.add(clan2);
-            cla.add(clan3);
+            ArrayList<Clan> cla = vratiClan(komid);
             Komisija k = new Komisija(komid, user, pass, cla);
 
             komisije.add(k);
@@ -154,8 +145,9 @@ public class DBBroker {
         }
     }
 
-    private Clan vratiClan(int c1) {
-        String upit = "SELECT * FROM clan WHERE clanID=" + c1;
+    private ArrayList<Clan> vratiClan(int c1) {
+        ArrayList<Clan> clanovi = new ArrayList<>();
+        String upit = "SELECT * FROM clan WHERE komisijaID=" + c1;
         Clan c = new Clan();
         try {
 
@@ -168,6 +160,7 @@ public class DBBroker {
                 String prezime = rs.getString(3);
                 int komID= rs.getInt(4);
                 c = new Clan(idClana, ime, prezime,komID);
+                clanovi.add(c);
 
             }
             rs.close();
@@ -175,7 +168,7 @@ public class DBBroker {
         } catch (SQLException ex) {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return c;
+        return clanovi;
     }
 
     public ArrayList<Drzevljanstvo> vratiDrzevljanstvo() throws SQLException {
@@ -449,7 +442,7 @@ public class DBBroker {
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
         while(rs.next()){
-            Zadatak zad = new Zadatak(rs.getInt("rbZadatka"), rs.getString("odgovor").charAt(0));
+            Zadatak zad = new Zadatak(rs.getInt("rbZadatka"), rs.getString("odgovor").toUpperCase().charAt(0));
             zadaci.add(zad);
                     
         }
@@ -549,7 +542,7 @@ public class DBBroker {
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
         while(rs.next()){
-            Resenje r = new Resenje(rs.getInt("rbZadatka"), rs.getString("odgovor").charAt(0));
+            Resenje r = new Resenje(rs.getInt("rbZadatka"), rs.getString("odgovor").toUpperCase().charAt(0));
             resenja.add(r);
         }
         

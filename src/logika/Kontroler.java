@@ -731,6 +731,9 @@ public class Kontroler {
                         }
                     }
                 }
+                if(suma <0){
+                    suma = 0;
+                }
                 
                 db.upisiRezultat(kart.getKartonID(),suma);
             }
