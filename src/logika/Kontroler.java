@@ -136,7 +136,9 @@ public class Kontroler {
             db.ucitajDriver();
             db.otvoriKonekciju();
             db.ubaciKomisiju(novaKom);
-
+            for (Clan cl: novaKom.getListaClanova()) {
+                db.izmeniClan(cl,novaKom);
+            }
             ubacen = true;
             db.commit();
         } catch (ClassNotFoundException ex) {

@@ -114,7 +114,9 @@ public class DBBroker {
             int idClana = rs.getInt(1);
             String ime = rs.getString(2);
             String prezime = rs.getString(3);
-            Clan c = new Clan(idClana, ime, prezime);
+            int komID= rs.getInt(4);
+            Clan c = new Clan(idClana, ime, prezime,komID);
+            System.out.println("Ubacen");
             listaClanova.add(c);
         }
         rs.close();
@@ -124,18 +126,12 @@ public class DBBroker {
     }
 
     public void ubaciKomisiju(Komisija novaKom) throws SQLException {
-        String upit = "INSERT INTO komisija(komisijaID,user,password,clan1,clan2,clan3) VALUES(?,?,?,?,?,?)";
+        String upit = "INSERT INTO komisija(komisijaID,user,password) VALUES(?,?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.setInt(1, novaKom.getKomisijaID());
         ps.setString(2, novaKom.getUsername());
         ps.setString(3, novaKom.getPassword());
-        ps.setInt(4, novaKom.getListaClanova().get(0).getClanID());
-        ps.setInt(5, novaKom.getListaClanova().get(1).getClanID());
-        if(novaKom.getListaClanova().get(2)!=null){
-        ps.setInt(6, novaKom.getListaClanova().get(2).getClanID());
-        }else {
-         ps.setInt(6,0);
-        }
+        
         ps.executeUpdate();
         ps.close();
     }
@@ -170,7 +166,8 @@ public class DBBroker {
                 int idClana = rs.getInt(1);
                 String ime = rs.getString(2);
                 String prezime = rs.getString(3);
-                c = new Clan(idClana, ime, prezime);
+                int komID= rs.getInt(4);
+                c = new Clan(idClana, ime, prezime,komID);
 
             }
             rs.close();
@@ -563,6 +560,14 @@ public class DBBroker {
         String upit = "UPDATE karton SET rezultatTesta ="+suma+" WHERE kartonID= "+kartonID+" AND brojUnosa = 1";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.executeUpdate();
+    }
+
+   
+
+    public void izmeniClan(Clan cl, Komisija novaKom) throws SQLException {
+       String upit = "UPDATE clan SET komisijaID="+novaKom.getKomisijaID()+" WHERE clanID="+cl.getClanID();
+       Statement s = konekcija.createStatement();
+       s.executeUpdate(upit);
     }
 
 }

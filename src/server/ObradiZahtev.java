@@ -82,6 +82,7 @@ public class ObradiZahtev extends Thread {
                         so.setOdgovor("!");
                     } else {
                         so.setPoruka("Neuspesno  ubacena komisija!");
+                        so.setOdgovor("!!");
                     }
 
                     break;

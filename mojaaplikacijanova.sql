@@ -24,18 +24,21 @@ CREATE TABLE `clan` (
   `clanID` int(11) NOT NULL,
   `ime` varchar(255) DEFAULT NULL,
   `prezime` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`clanID`)
+  `komisijaID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`clanID`),
+  KEY `komisijaID` (`komisijaID`),
+  CONSTRAINT `clan_ibfk_1` FOREIGN KEY (`komisijaID`) REFERENCES `komisija` (`komisijaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `clan` */
 
-insert  into `clan`(`clanID`,`ime`,`prezime`) values 
-(1,'Dusan','Savic'),
-(2,'Sladjana','Benkovic'),
-(3,'Veljko','Jeremic'),
-(4,'Mladen','Cudanov'),
-(5,'Dusan','Barac'),
-(6,'Dejan','Stojimirovic');
+insert  into `clan`(`clanID`,`ime`,`prezime`,`komisijaID`) values 
+(1,'Dusan','Savic',3),
+(2,'Sladjana','Benkovic',2),
+(3,'Veljko','Jeremic',2),
+(4,'Mladen','Cudanov',3),
+(5,'Dusan','Barac',2),
+(6,'Dejan','Stojimirovic',3);
 
 /*Table structure for table `drzevljanstvo` */
 
@@ -146,18 +149,15 @@ CREATE TABLE `komisija` (
   `komisijaID` int(11) NOT NULL,
   `user` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `clan1` int(11) DEFAULT NULL,
-  `clan2` int(11) DEFAULT NULL,
-  `clan3` int(11) DEFAULT NULL,
   PRIMARY KEY (`komisijaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `komisija` */
 
-insert  into `komisija`(`komisijaID`,`user`,`password`,`clan1`,`clan2`,`clan3`) values 
-(111,'komisija1','prvakomisija',1,5,3),
-(112,'komisija2','drugakomisija',6,2,3),
-(113,'komisija3','trecakomisija',4,6,3);
+insert  into `komisija`(`komisijaID`,`user`,`password`) values 
+(1,'kom1','k1'),
+(2,'kom2','k2'),
+(3,'kom3','k3');
 
 /*Table structure for table `nacionalnost` */
 
