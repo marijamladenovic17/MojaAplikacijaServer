@@ -58,7 +58,7 @@ public class ObradiZahtev extends Thread {
 
                     } else {
                         so.setPoruka("Sluzbenik sa ovim korisnickim nalogom ne postoji!");
-
+                         so.setOdgovor("!!");
                     }
 
                     break;
@@ -101,6 +101,7 @@ public class ObradiZahtev extends Thread {
                         so.setOdgovor("!");
                     } else {
                         so.setPoruka("Neuspesno  promenjena komisija!");
+                         so.setOdgovor("!");
                     }
 
                     break;
