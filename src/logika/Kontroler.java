@@ -6,6 +6,7 @@
 package logika;
 
 import db.DBBroker;
+import db.Konstanta;
 import domen.Clan;
 import domen.Drzevljanstvo;
 import domen.GrupaZadatka;
@@ -136,8 +137,8 @@ public class Kontroler {
             db.ucitajDriver();
             db.otvoriKonekciju();
             db.ubaciKomisiju(novaKom);
-            for (Clan cl: novaKom.getListaClanova()) {
-                db.izmeniClan(cl,novaKom);
+            for (Clan cl : novaKom.getListaClanova()) {
+                db.izmeniClan(cl, novaKom);
             }
             ubacen = true;
             db.commit();
@@ -540,18 +541,18 @@ public class Kontroler {
 
     public Kandidat vratiKandidata(String kanBroj) {
         Kandidat kan = null;
-        
+
         try {
             db.ucitajDriver();
             db.otvoriKonekciju();
             kan = db.vratiKandidata(kanBroj);
         } catch (ClassNotFoundException ex) {
-            kan=null;
+            kan = null;
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            kan=null;
+            kan = null;
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-            
+
         } finally {
             try {
                 db.zatvoriKonekciju();
@@ -569,7 +570,7 @@ public class Kontroler {
             db.otvoriKonekciju();
             db.izmeniKarton(kaa);
             db.commit();
-            s= true;
+            s = true;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
             try {
@@ -579,19 +580,19 @@ public class Kontroler {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-             try {
+            try {
                 db.rollback();
             } catch (SQLException ex1) {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-       return s;
-       
+        return s;
+
     }
 
     public boolean izmeniZadatke(PomocIzmena pi) {
         boolean izmenjen = false;
-        
+
         try {
             db.ucitajDriver();
             db.otvoriKonekciju();
@@ -601,7 +602,7 @@ public class Kontroler {
             }
             db.commit();
             izmenjen = true;
-            
+
         } catch (ClassNotFoundException ex) {
             try {
                 db.rollback();
@@ -616,14 +617,14 @@ public class Kontroler {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             try {
                 db.zatvoriKonekciju();
             } catch (SQLException ex) {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return izmenjen;
     }
 
@@ -631,23 +632,23 @@ public class Kontroler {
         ServerskiOdgovor so = new ServerskiOdgovor();
         String loseUneseni = "";
         boolean imaLosih = false;
-        
+
         try {
             db.ucitajDriver();
             db.otvoriKonekciju();
             ArrayList<Karton> kartoni = db.vratiKartone();
             int ukupanBrojKartona = kartoni.size();
-            for(int i = 0; i<ukupanBrojKartona; i++){
+            for (int i = 0; i < ukupanBrojKartona; i++) {
                 Karton kart1 = kartoni.get(i);
-                for(int j = i+1; j<ukupanBrojKartona; j++){
+                for (int j = i + 1; j < ukupanBrojKartona; j++) {
                     Karton kart2 = kartoni.get(j);
-                    if(kart1.getBrKartona() == kart2.getBrKartona()){
+                    if (kart1.getBrKartona() == kart2.getBrKartona()) {
                         int brojOdgovora = kart1.getListaOdg().size();
                         ArrayList<Zadatak> odgovori1 = kart1.getListaOdg();
                         ArrayList<Zadatak> odgovori2 = kart2.getListaOdg();
-                        for(int m = 0; m<brojOdgovora; m++){
-                            if(odgovori1.get(m).getOdgovor() != odgovori2.get(m).getOdgovor()){
-                                loseUneseni = loseUneseni + kart1.getBrKartona()+" ";
+                        for (int m = 0; m < brojOdgovora; m++) {
+                            if (odgovori1.get(m).getOdgovor() != odgovori2.get(m).getOdgovor()) {
+                                loseUneseni = loseUneseni + kart1.getBrKartona() + " ";
                                 imaLosih = true;
                                 break;
                             }
@@ -656,30 +657,30 @@ public class Kontroler {
                     }
                 }
             }
-            
-            if(imaLosih){
+
+            if (imaLosih) {
                 so.setPoruka("Spajanje kartona zavrseno. Lose uneseni kartoni: " + loseUneseni);
-            }else{
+            } else {
                 so.setPoruka("Spajanje kartona zavrseno. Nema lose unesenih. ");
             }
-            
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             try {
                 db.zatvoriKonekciju();
             } catch (SQLException ex) {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return so;
     }
 
     public ArrayList<Karton> vratiKartoneYaProveru(int kartonskiBroj) {
-         ArrayList<Karton> kartoni = null;
+        ArrayList<Karton> kartoni = null;
 
         try {
             db.ucitajDriver();
@@ -708,11 +709,11 @@ public class Kontroler {
             ArrayList<Karton> kartoni = db.vratiKartoneZaPoene();
             ArrayList<Karton> prviUnos = new ArrayList<>();
             for (Karton karton : kartoni) {
-                if(karton.getBrUnosa()==1){
+                if (karton.getBrUnosa() == 1) {
                     prviUnos.add(karton);
                 }
             }
-            
+
             for (Karton kart : prviUnos) {
                 double suma = 0;
                 int brojac = kart.getListaOdg().size();
@@ -721,42 +722,42 @@ public class Kontroler {
                 for (int i = 0; i < brojac; i++) {
                     char res = resenja.get(i).getOdgovor();
                     char zad = zadaci.get(i).getOdgovor();
-                    if(zad == res){
-                        suma+=5;
-                    }else{
-                        if(zad == 'N'){
-                            suma+=0;
-                        }else{
-                            suma-=3;
+                    if (zad == res) {
+                        suma += 5;
+                    } else {
+                        if (zad == 'N') {
+                            suma += 0;
+                        } else {
+                            suma -= 3;
                         }
                     }
                 }
-                if(suma <0){
+                if (suma < 0) {
                     suma = 0;
                 }
-                
-                db.upisiRezultat(kart.getKartonID(),suma);
+
+                db.upisiRezultat(kart.getKartonID(), suma);
             }
             db.commit();
             so.setPoruka("Uspesno izracunati poeni");
-            
+
         } catch (ClassNotFoundException ex) {
             try {
                 db.rollback();
-            so.setPoruka("Doslo je do greske");
+                so.setPoruka("Doslo je do greske");
             } catch (SQLException ex1) {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-             try {
+            try {
                 db.rollback();
-            so.setPoruka("Doslo je do greske");
+                so.setPoruka("Doslo je do greske");
             } catch (SQLException ex1) {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             try {
                 db.zatvoriKonekciju();
             } catch (SQLException ex) {
@@ -764,6 +765,23 @@ public class Kontroler {
             }
         }
         return so;
+    }
+
+    public void promeniUsername(String username) {
+        db.izmeniProperty(Konstanta.USER, username);
+    }
+
+    public void promeniDriver(String driver) {
+        db.izmeniProperty(Konstanta.DRIVER, driver);
+
+    }
+
+    public void promeniPass(String pass) {
+        db.izmeniProperty(Konstanta.PASS, pass);
+    }
+
+    public void promeniUrl(String url) {
+        db.izmeniProperty(Konstanta.URL, url);
     }
 
 }

@@ -6,6 +6,7 @@
 package forme;
 
 import java.awt.Toolkit;
+import logika.Kontroler;
 import server.PokreniServer;
 
 /**
@@ -40,6 +41,19 @@ public class FormaServer extends javax.swing.JFrame {
         btnPokreniServer = new javax.swing.JButton();
         txtStatus = new javax.swing.JTextField();
         btnZaustaviServer = new javax.swing.JButton();
+        panelBaza = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtDriver = new javax.swing.JTextField();
+        txtUsername = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JTextField();
+        btnPromeniDriver = new javax.swing.JButton();
+        btnPromeniUsername = new javax.swing.JButton();
+        btnPromeniPass = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        txt_Url = new javax.swing.JTextField();
+        btnPromeniUrl = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,17 +76,107 @@ public class FormaServer extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Unesite driver:");
+
+        jLabel2.setText("Unesite username:");
+
+        jLabel3.setText("Unesite password:");
+
+        btnPromeniDriver.setText("Promeni driver");
+        btnPromeniDriver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPromeniDriverActionPerformed(evt);
+            }
+        });
+
+        btnPromeniUsername.setText("Promeni username");
+        btnPromeniUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPromeniUsernameActionPerformed(evt);
+            }
+        });
+
+        btnPromeniPass.setText("Promeni password");
+        btnPromeniPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPromeniPassActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Unesite url:");
+
+        btnPromeniUrl.setText("Promenite url");
+        btnPromeniUrl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPromeniUrlActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBazaLayout = new javax.swing.GroupLayout(panelBaza);
+        panelBaza.setLayout(panelBazaLayout);
+        panelBazaLayout.setHorizontalGroup(
+            panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBazaLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(txt_Url))
+                .addGap(48, 48, 48)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnPromeniDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPromeniUsername, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPromeniPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPromeniUrl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelBazaLayout.setVerticalGroup(
+            panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBazaLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPromeniDriver))
+                .addGap(39, 39, 39)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(btnPromeniUsername))
+                .addGap(39, 39, 39)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(btnPromeniPass))
+                .addGap(23, 23, 23)
+                .addGroup(panelBazaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txt_Url, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPromeniUrl))
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(45, 45, 45)
-                .addComponent(btnPokreniServer)
-                .addGap(58, 58, 58)
-                .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addComponent(btnZaustaviServer)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelBaza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnPokreniServer)
+                        .addGap(58, 58, 58)
+                        .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59)
+                        .addComponent(btnZaustaviServer)))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -83,7 +187,9 @@ public class FormaServer extends javax.swing.JFrame {
                     .addComponent(btnPokreniServer)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnZaustaviServer))
-                .addContainerGap(355, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(panelBaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -102,15 +208,43 @@ public class FormaServer extends javax.swing.JFrame {
 
     private void btnPokreniServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPokreniServerActionPerformed
         // TODO add your handling code here:
+        panelBaza.setVisible(false);
         ps = new PokreniServer(this);
         ps.start();
+        
         
     }//GEN-LAST:event_btnPokreniServerActionPerformed
 
     private void btnZaustaviServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZaustaviServerActionPerformed
         // TODO add your handling code here:
+       
         ps.interrupt();
+        panelBaza.setVisible(true);
     }//GEN-LAST:event_btnZaustaviServerActionPerformed
+
+    private void btnPromeniUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromeniUsernameActionPerformed
+        // TODO add your handling code here:
+        String username = txtUsername.getText();
+        Kontroler.getInstance().promeniUsername(username);
+    }//GEN-LAST:event_btnPromeniUsernameActionPerformed
+
+    private void btnPromeniDriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromeniDriverActionPerformed
+        // TODO add your handling code here:
+        String driver = txtDriver.getText();
+        Kontroler.getInstance().promeniDriver(driver);
+    }//GEN-LAST:event_btnPromeniDriverActionPerformed
+
+    private void btnPromeniPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromeniPassActionPerformed
+        // TODO add your handling code here:
+        String pass = txtPassword.getText();
+        Kontroler.getInstance().promeniPass(pass);
+    }//GEN-LAST:event_btnPromeniPassActionPerformed
+
+    private void btnPromeniUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromeniUrlActionPerformed
+        // TODO add your handling code here:
+        String url = txt_Url.getText();
+        Kontroler.getInstance().promeniUrl(url);
+    }//GEN-LAST:event_btnPromeniUrlActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,9 +283,22 @@ public class FormaServer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPokreniServer;
+    private javax.swing.JButton btnPromeniDriver;
+    private javax.swing.JButton btnPromeniPass;
+    private javax.swing.JButton btnPromeniUrl;
+    private javax.swing.JButton btnPromeniUsername;
     private javax.swing.JButton btnZaustaviServer;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel panelBaza;
+    private javax.swing.JTextField txtDriver;
+    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtStatus;
+    private javax.swing.JTextField txtUsername;
+    private javax.swing.JTextField txt_Url;
     // End of variables declaration//GEN-END:variables
 
     public void serverPokrenut() {

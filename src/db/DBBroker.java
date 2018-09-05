@@ -562,5 +562,11 @@ public class DBBroker {
        Statement s = konekcija.createStatement();
        s.executeUpdate(upit);
     }
+    
+    public void izmeniProperty(String key, String vrednost){
+        rp.upisiVrednost(key, vrednost);
+    }
+    
+    
 
 }

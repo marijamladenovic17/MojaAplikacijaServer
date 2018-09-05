@@ -36,6 +36,7 @@ public class PokreniServer extends Thread{
                 
             Socket soket = ss.accept();
             System.out.println("Klijent se povezao");
+            
             ObradiZahtev oz = new ObradiZahtev(soket);
             oz.start();
             }
