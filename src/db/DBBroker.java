@@ -12,8 +12,10 @@ import domen.Kandidat;
 import domen.Karton;
 import domen.Komisija;
 import domen.Nacionalnost;
+import domen.Rang_Lista;
 import domen.Resenje;
 import domen.SrednjaSkola;
+import domen.Stavka_Rang_Liste;
 import domen.Test;
 import domen.Zadatak;
 import domen.ZanimanjeRoditelja;
@@ -620,6 +622,54 @@ public class DBBroker {
     public void upisiKandidatuPoene(int suma, String jmbg) throws SQLException {
         String upit = "update kandidat set ukupanRezultat= " + suma+" where jmbg = '" + jmbg + "'";
         PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.executeUpdate();
+    }
+
+    public ArrayList<Kandidat> vratiSveKandidateZaRL() throws SQLException {
+         ArrayList<Kandidat> kandidati = new ArrayList<>();
+        String upit = "select * from kandidat order by ukupanRezultat desc";
+        Statement stat = konekcija.createStatement();
+        ResultSet rs = stat.executeQuery(upit);
+        while(rs.next()){
+            String prezime =rs.getString("prezime");
+           String sifraPrijave =rs.getString("sifraPrijave");
+           String jmbg =rs.getString("jmbg");
+           String imeRoditelja =rs.getString("imeRoditelja");
+           String ime =rs.getString("ime");
+           String pol =rs.getString("pol");
+           String mobilni =rs.getString("mobilni");
+           String fiksni =rs.getString("fiksni");
+           int ur = rs.getInt("ukupanRezultat");
+            
+            Kandidat kandidat = new Kandidat();
+            kandidat.setUkupanBrojPoena(ur);
+            kandidat.setFiksni(fiksni);
+            kandidat.setJmbg(jmbg);
+            kandidat.setIme(ime);
+            kandidat.setPol(pol);
+            kandidat.setPrezime(prezime);
+            kandidat.setSifraPrijave(sifraPrijave);
+            kandidat.setMobilni(mobilni);
+            kandidat.setImeRoditelja(imeRoditelja);
+            kandidati.add(kandidat);
+        }
+        return kandidati;
+    }
+
+    public void sacuvajStavku(Stavka_Rang_Liste srl, String sifraRL) throws SQLException {
+        String upit = "INSERT INTO stavka_rang_liste(sifraRL, redniBroj, jmbg) VALUES(?,?,?)";
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.setString(1, sifraRL);
+        ps.setInt(2, srl.getRedniBroj());
+        ps.setString(3, srl.getKandidat().getJmbg());
+        ps.executeUpdate();
+    }
+
+    public void sacuvajRangListu(Rang_Lista rl) throws SQLException {
+        String upit = "INSERT INTO rang_lista(sifraRL, godina) VALUES(?,?)";
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.setString(1, rl.getSifraRL());
+        ps.setInt(2, rl.getGodina());
         ps.executeUpdate();
     }
     

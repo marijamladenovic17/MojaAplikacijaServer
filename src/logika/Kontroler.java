@@ -15,9 +15,11 @@ import domen.Karton;
 import domen.Komisija;
 import domen.Nacionalnost;
 import domen.PomocIzmena;
+import domen.Rang_Lista;
 import domen.Resenje;
 import domen.Sluzbenik;
 import domen.SrednjaSkola;
+import domen.Stavka_Rang_Liste;
 import domen.Test;
 import domen.Zadatak;
 import domen.ZanimanjeRoditelja;
@@ -833,6 +835,37 @@ public class Kontroler {
             db.ucitajDriver();
             db.otvoriKonekciju();
             db.upisiKandidatuPoene(suma, jmbg);
+            db.commit();
+        } catch (ClassNotFoundException ex) {
+            try {
+                db.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            try {
+                db.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public ArrayList<Kandidat> vratiKandidateZaRL() {
+         ArrayList<Kandidat> kandidati = null;
+        
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kandidati = db.vratiSveKandidateZaRL();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -844,6 +877,50 @@ public class Kontroler {
                 Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return kandidati;
     }
+
+    public boolean sacuvajRangListu(Rang_Lista rl) {
+        boolean uspesno = false;
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            ArrayList<Stavka_Rang_Liste> stavke = rl.getStavke();
+            for (Stavka_Rang_Liste srl : stavke) {
+                db.sacuvajStavku(srl,rl.getSifraRL());
+            }
+            
+            db.sacuvajRangListu(rl);
+            db.commit();
+            uspesno = true;
+            
+        } catch (ClassNotFoundException ex) {
+            
+            try {
+                db.rollback();
+                uspesno = false;
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            
+        } catch (SQLException ex) {
+            try {
+                db.rollback();
+                uspesno = false;
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return uspesno;
+    }
+
 
 }

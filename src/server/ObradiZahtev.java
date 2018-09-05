@@ -13,14 +13,18 @@ import domen.Karton;
 import domen.Komisija;
 import domen.Nacionalnost;
 import domen.PomocIzmena;
+import domen.Rang_Lista;
 import domen.SrednjaSkola;
+import domen.Stavka_Rang_Liste;
 import domen.Test;
 import domen.ZanimanjeRoditelja;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,6 +32,7 @@ import konstante.Operacije;
 import logika.Kontroler;
 import transfer.KlijentskiZahtev;
 import transfer.ServerskiOdgovor;
+import java.util.Date;
 
 /**
  *
@@ -291,23 +296,47 @@ public class ObradiZahtev extends Thread {
                         ArrayList<Kandidat> kandidati = Kontroler.getInstance().vratiSveKandidate();
                         for (Kandidat kandidat1 : kandidati) {
                             int suma = 0;
+                            int brojac = 0;
                             for (Karton kartonn : kartoni) {
                                 if(kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())){
+                                    brojac++;
                                     suma+=kartonn.getRezultatTesta();
                                 }
                             }
-                            
+                            if(brojac>1){
+                                suma = (int) (suma*0.5);
+                            }
                             if(suma<0){
                                 suma = 0;
                             }
                             
                             Kontroler.getInstance().upisiKandidatuPoene(suma, kandidat1.getJmbg());
                         }
-                        
-                        
-                        
-                        
-                        
+
+                            ArrayList<Kandidat> kandids = Kontroler.getInstance().vratiKandidateZaRL();
+
+                            Rang_Lista rl = new Rang_Lista();
+                            ArrayList<Stavka_Rang_Liste> stavke = new ArrayList<>();
+                            int rb = 1;
+
+                            for (Kandidat kd : kandids) {
+                                Stavka_Rang_Liste srl = new Stavka_Rang_Liste();
+                                srl.setKandidat(kd);
+                                srl.setRedniBroj(rb);
+                                stavke.add(srl);
+                                rb++;
+                            }
+                            rl.setStavke(stavke);
+                            LocalDate ld = LocalDate.now();
+                            rl.setGodina(ld.getYear());
+                            rl.setSifraRL("sifra");
+                            boolean uspesnoNapravljenaRangLista = Kontroler.getInstance().sacuvajRangListu(rl);
+                            so.setOdgovor(rl);
+                            if(uspesnoNapravljenaRangLista){
+                                so.setPoruka("Uspesno napravljena rang-lista");
+                            }else{
+                                so.setPoruka("Negde si se zeznuo");
+                            }
                         break;
 
             }
