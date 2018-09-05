@@ -566,6 +566,62 @@ public class DBBroker {
     public void izmeniProperty(String key, String vrednost){
         rp.upisiVrednost(key, vrednost);
     }
+
+    public ArrayList<Karton> vratiSveKartone() throws SQLException {
+        ArrayList<Karton> kartoni = new ArrayList<>();
+        String upit = "SELECT * FROM karton k JOIN kandidat ka ON k.kandidatID = ka.jmbg JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID where brojUnosa = 1";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while (rs.next()) {
+            Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
+            GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
+            Kandidat kandidat = new Kandidat();
+            kandidat.setJmbg(rs.getString("ka.jmbg"));
+            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, kandidat);
+            int kID = kart.getKartonID();
+            double rezultat = rs.getDouble("rezultatTesta");
+            kart.setRezultatTesta(rezultat);
+            ArrayList<Zadatak> zadaci = vratiZadatke(kID);
+            kart.setListaOdg(zadaci);
+            kartoni.add(kart);
+        }
+        return kartoni;
+    }
+
+    public ArrayList<Kandidat> vratiSveKandidate() throws SQLException {
+        ArrayList<Kandidat> kandidati = new ArrayList<>();
+        String upit = "select * from kandidat";
+        Statement stat = konekcija.createStatement();
+        ResultSet rs = stat.executeQuery(upit);
+        while(rs.next()){
+            String prezime =rs.getString("prezime");
+           String sifraPrijave =rs.getString("sifraPrijave");
+           String jmbg =rs.getString("jmbg");
+           String imeRoditelja =rs.getString("imeRoditelja");
+           String ime =rs.getString("ime");
+           String pol =rs.getString("pol");
+           String mobilni =rs.getString("mobilni");
+           String fiksni =rs.getString("fiksni");
+            
+            Kandidat kandidat = new Kandidat();
+            kandidat.setFiksni(fiksni);
+            kandidat.setJmbg(jmbg);
+            kandidat.setIme(ime);
+            kandidat.setPol(pol);
+            kandidat.setPrezime(prezime);
+            kandidat.setSifraPrijave(sifraPrijave);
+            kandidat.setMobilni(mobilni);
+            kandidat.setImeRoditelja(imeRoditelja);
+            kandidati.add(kandidat);
+        }
+        return kandidati;
+    }
+
+    public void upisiKandidatuPoene(int suma, String jmbg) throws SQLException {
+        String upit = "update kandidat set ukupanRezultat= " + suma+" where jmbg = '" + jmbg + "'";
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.executeUpdate();
+    }
     
     
 

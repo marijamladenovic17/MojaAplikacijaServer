@@ -284,6 +284,30 @@ public class ObradiZahtev extends Thread {
                         
                         so = Kontroler.getInstance().izracunajPoene();
                     break;
+                    
+                    case Operacije.NAPRAVI_RANG_LISTU:
+                        ArrayList<Karton> kartoni = Kontroler.getInstance().vratiSveKartone();
+                        ArrayList<Kandidat> kandidati = Kontroler.getInstance().vratiSveKandidate();
+                        for (Kandidat kandidat1 : kandidati) {
+                            int suma = 0;
+                            for (Karton kartonn : kartoni) {
+                                if(kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())){
+                                    suma+=kartonn.getRezultatTesta();
+                                }
+                            }
+                            
+                            if(suma<0){
+                                suma = 0;
+                            }
+                            
+                            Kontroler.getInstance().upisiKandidatuPoene(suma, kandidat1.getJmbg());
+                        }
+                        
+                        
+                        
+                        
+                        
+                        break;
 
             }
             posaljiSO(so);

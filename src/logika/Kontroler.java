@@ -784,4 +784,66 @@ public class Kontroler {
         db.izmeniProperty(Konstanta.URL, url);
     }
 
+    public ArrayList<Karton> vratiSveKartone() {
+        ArrayList<Karton> kartoni = null;
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kartoni = db.vratiSveKartone();
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return kartoni;
+    }
+
+    public ArrayList<Kandidat> vratiSveKandidate() {
+        ArrayList<Kandidat> kandidati = null;
+        
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kandidati = db.vratiSveKandidate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return kandidati;
+    }
+
+    public void upisiKandidatuPoene(int suma, String jmbg) {
+        
+        
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            db.upisiKandidatuPoene(suma, jmbg);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
 }

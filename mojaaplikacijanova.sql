@@ -1,6 +1,6 @@
 /*
-SQLyog Community v12.5.1 (64 bit)
-MySQL - 10.1.26-MariaDB : Database - mojaaplikacijanovo
+SQLyog Community v12.4.1 (64 bit)
+MySQL - 10.1.30-MariaDB : Database - mojaaplikacijanovo
 *********************************************************************
 */
 
@@ -38,7 +38,8 @@ insert  into `clan`(`clanID`,`ime`,`prezime`,`komisijaID`) values
 (3,'Veljko','Jeremic',2),
 (4,'Mladen','Cudanov',3),
 (5,'Dusan','Barac',2),
-(6,'Dejan','Stojimirovic',3);
+(6,'Dejan','Stojimirovic',3),
+(7,'Sinisa','Vlajic',NULL);
 
 /*Table structure for table `drzevljanstvo` */
 
@@ -95,6 +96,7 @@ CREATE TABLE `kandidat` (
   `sifraZanimanjaRoditelja` int(11) DEFAULT NULL,
   `sifraSS` int(11) DEFAULT NULL,
   `nacionalnostID` int(11) DEFAULT NULL,
+  `ukupanRezultat` double DEFAULT NULL,
   PRIMARY KEY (`jmbg`),
   KEY `drzevljanstvoID` (`drzevljanstvoID`),
   KEY `sifraZanimanjaRoditelja` (`sifraZanimanjaRoditelja`),
@@ -107,14 +109,6 @@ CREATE TABLE `kandidat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `kandidat` */
-
-insert  into `kandidat`(`prezime`,`sifraPrijave`,`jmbg`,`imeRoditelja`,`ime`,`pol`,`mobilni`,`fiksni`,`drzevljanstvoID`,`sifraZanimanjaRoditelja`,`sifraSS`,`nacionalnostID`) values 
-('fkijergr','665','1012199525264','jrker','grejigj','Muski','065-6592358','017/8989898',1,100,200,300),
-('mkffdv','454','1212455666666','vdjikg','rejgijvfa','Zenski','065-89856265','017/8959562',1,100,200,300),
-('Markovic','44','1512200056565','Marina','Marko','Muski','+999026556523','+9990658569',1,100,200,300),
-('Nerandzic','254','1512356565852','Jovan','Jovana','Zenski','065-4444444','017/5485625',2,101,201,301),
-('Mladenovic','1','1705995887796','Bora','Marija','Zenski','064-77845230','018/55426',1,100,200,300),
-('Saric','545','2105444444444','Aleksandar','Aleksa','Muski','065-56985652','017/2625262',1,100,200,300);
 
 /*Table structure for table `karton` */
 
@@ -137,9 +131,10 @@ CREATE TABLE `karton` (
 /*Data for the table `karton` */
 
 insert  into `karton`(`brojUnosa`,`kartonID`,`brojKartona`,`kandidatID`,`rezultatTesta`,`brojGrupe`) values 
-(1,23,55545,NULL,NULL,'1225'),
-(1,24,484,'1705995887796',NULL,'1225'),
-(1,25,555,NULL,NULL,'1225');
+(1,23,55545,NULL,36,'1225'),
+(1,25,555,NULL,12,'1225'),
+(1,26,111,NULL,0,'1225'),
+(2,27,111,NULL,NULL,'1225');
 
 /*Table structure for table `komisija` */
 
@@ -175,26 +170,12 @@ insert  into `nacionalnost`(`nacionalnostID`,`naziv`) values
 (300,'Srbin'),
 (301,'Bosnjak');
 
-/*Table structure for table `rang` */
-
-DROP TABLE IF EXISTS `rang`;
-
-CREATE TABLE `rang` (
-  `brojKartona` int(11) DEFAULT NULL,
-  `rang` int(3) DEFAULT NULL,
-  `brojPoena` float DEFAULT NULL,
-  `redniBroj` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `rang` */
-
 /*Table structure for table `rang-lista` */
 
 DROP TABLE IF EXISTS `rang-lista`;
 
 CREATE TABLE `rang-lista` (
   `sifraRL` varchar(25) NOT NULL,
-  `smer` varchar(255) DEFAULT NULL,
   `godina` int(4) DEFAULT NULL,
   PRIMARY KEY (`sifraRL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -325,7 +306,8 @@ DROP TABLE IF EXISTS `stavka_rang-liste`;
 
 CREATE TABLE `stavka_rang-liste` (
   `sifraRL` varchar(25) DEFAULT NULL,
-  `redniBroj` int(3) DEFAULT NULL
+  `redniBroj` int(3) DEFAULT NULL,
+  `jmbg` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `stavka_rang-liste` */
@@ -357,7 +339,7 @@ CREATE TABLE `zadatak` (
   `zadatakID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`kartonID`,`zadatakID`),
   KEY `zadatakID` (`zadatakID`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 
 /*Data for the table `zadatak` */
 
@@ -421,7 +403,47 @@ insert  into `zadatak`(`kartonID`,`rbZadatka`,`odgovor`,`zadatakID`) values
 (25,17,'E',57),
 (25,18,'A',58),
 (25,19,'B',59),
-(25,20,'C',60);
+(25,20,'C',60),
+(26,1,'A',61),
+(26,2,'A',62),
+(26,3,'A',63),
+(26,4,'C',64),
+(26,5,'A',65),
+(26,6,'E',66),
+(26,7,'A',67),
+(26,8,'A',68),
+(26,9,'A',69),
+(26,10,'B',70),
+(26,11,'B',71),
+(26,12,'N',72),
+(26,13,'B',73),
+(26,14,'B',74),
+(26,15,'B',75),
+(26,16,'E',76),
+(26,17,'B',77),
+(26,18,'B',78),
+(26,19,'B',79),
+(26,20,'B',80),
+(27,1,'A',81),
+(27,2,'A',82),
+(27,3,'A',83),
+(27,4,'C',84),
+(27,5,'A',85),
+(27,6,'A',86),
+(27,7,'A',87),
+(27,8,'A',88),
+(27,9,'A',89),
+(27,10,'B',90),
+(27,11,'B',91),
+(27,12,'N',92),
+(27,13,'B',93),
+(27,14,'B',94),
+(27,15,'B',95),
+(27,16,'E',96),
+(27,17,'B',97),
+(27,18,'B',98),
+(27,19,'B',99),
+(27,20,'B',100);
 
 /*Table structure for table `zanimanjeroditelja` */
 
