@@ -33,12 +33,12 @@ CREATE TABLE `clan` (
 /*Data for the table `clan` */
 
 insert  into `clan`(`clanID`,`ime`,`prezime`,`komisijaID`) values 
-(1,'Dusan','Savic',3),
-(2,'Sladjana','Benkovic',2),
-(3,'Veljko','Jeremic',2),
-(4,'Mladen','Cudanov',3),
-(5,'Dusan','Barac',2),
-(6,'Dejan','Stojimirovic',3),
+(1,'Dusan','Savic',NULL),
+(2,'Sladjana','Benkovic',NULL),
+(3,'Veljko','Jeremic',1),
+(4,'Mladen','Cudanov',NULL),
+(5,'Dusan','Barac',1),
+(6,'Dejan','Stojimirovic',NULL),
 (7,'Sinisa','Vlajic',NULL);
 
 /*Table structure for table `drzevljanstvo` */
@@ -155,9 +155,7 @@ CREATE TABLE `komisija` (
 /*Data for the table `komisija` */
 
 insert  into `komisija`(`komisijaID`,`user`,`password`) values 
-(1,'kom1','k1'),
-(2,'kom2','k2'),
-(3,'kom3','k3');
+(1,'kom1','k1');
 
 /*Table structure for table `nacionalnost` */
 
