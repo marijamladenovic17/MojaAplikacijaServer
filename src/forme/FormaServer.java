@@ -76,6 +76,8 @@ public class FormaServer extends javax.swing.JFrame {
             }
         });
 
+        panelBaza.setBorder(javax.swing.BorderFactory.createTitledBorder("Proprety fajl"));
+
         jLabel1.setText("Unesite driver:");
 
         jLabel2.setText("Unesite username:");
@@ -177,7 +179,7 @@ public class FormaServer extends javax.swing.JFrame {
                         .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(59, 59, 59)
                         .addComponent(btnZaustaviServer)))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,7 +191,7 @@ public class FormaServer extends javax.swing.JFrame {
                     .addComponent(btnZaustaviServer))
                 .addGap(18, 18, 18)
                 .addComponent(panelBaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
