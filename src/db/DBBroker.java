@@ -14,6 +14,7 @@ import domen.Komisija;
 import domen.Nacionalnost;
 import domen.Rang_Lista;
 import domen.Resenje;
+import domen.Sluzbenik;
 import domen.SrednjaSkola;
 import domen.Stavka_Rang_Liste;
 import domen.Test;
@@ -671,6 +672,21 @@ public class DBBroker {
         ps.setString(1, rl.getSifraRL());
         ps.setInt(2, rl.getGodina());
         ps.executeUpdate();
+    }
+
+    public ArrayList<Sluzbenik> vratiSluzbenike() throws SQLException {
+        ArrayList<Sluzbenik> sluzbs = new ArrayList<>();
+        String upit = "SELECT * FROM sluzbenik";
+        Statement stat = konekcija.createStatement();
+        ResultSet rs = stat.executeQuery(upit);
+        while(rs.next()){
+            String imePrezime = rs.getString("imePrezime");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            Sluzbenik s = new Sluzbenik(username, username, password);
+            sluzbs.add(s);
+        }
+        return sluzbs;
     }
     
     

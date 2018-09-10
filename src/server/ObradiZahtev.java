@@ -14,6 +14,7 @@ import domen.Komisija;
 import domen.Nacionalnost;
 import domen.PomocIzmena;
 import domen.Rang_Lista;
+import domen.Sluzbenik;
 import domen.SrednjaSkola;
 import domen.Stavka_Rang_Liste;
 import domen.Test;
@@ -335,8 +336,28 @@ public class ObradiZahtev extends Thread {
                             if(uspesnoNapravljenaRangLista){
                                 so.setPoruka("Uspesno napravljena rang-lista");
                             }else{
-                                so.setPoruka("Negde si se zeznuo");
+                                so.setPoruka("Nesto nije u redu");
                             }
+                        break;
+                    case Operacije.NADJI_PRIJAVLJENOG:
+                        
+                        so.setOdgovor(null);
+                        String[] nizz = new String[2];
+                        nizz = (String[]) kz.getParametar();
+                        ArrayList<Sluzbenik> sluzbenici = Kontroler.getInstance().vratiSveSluzbenike();
+                        for (Sluzbenik sluzbenik : sluzbenici) {
+                          if(sluzbenik.getUsername().equals(nizz[0]) && sluzbenik.getPassword().equals(nizz[1])){
+                              so.setOdgovor(sluzbenik);
+                          }  
+                        }
+                        if(so.getOdgovor()==null){
+                        ArrayList<Komisija> koms = Kontroler.getInstance().vratiSveKomisije();
+                        for (Komisija komis : koms) {
+                            if(komis.getUsername().equals(nizz[0]) && komis.getPassword().equals(nizz[1])){
+                              so.setOdgovor(komis);
+                          }  
+                        }
+                        }
                         break;
 
             }
