@@ -239,7 +239,7 @@ public class DBBroker {
     }
 
     public void sacuvajKandidata(Kandidat kandidat) throws SQLException {
-        String upit = "INSERT INTO kandidat(prezime,sifraPrijave,jmbg,imeRoditelja,ime,pol,mobilni,fiksni,drzevljanstvoID,sifraZanimanjaRoditelja,sifraSS,nacionalnostID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String upit = "INSERT INTO kandidat(prezime,sifraPrijave,jmbg,imeRoditelja,ime,pol,mobilni,fiksni,drzavljanstvoID,sifraZanimanjaRoditelja,sifraSS,nacionalnostID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.setString(1, kandidat.getPrezime());
         ps.setString(2, kandidat.getSifraPrijave());
