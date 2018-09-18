@@ -38,8 +38,8 @@ insert  into `clan`(`clanID`,`ime`,`prezime`,`komisijaID`) values
 (3,'Veljko','Jeremic',1),
 (4,'Mladen','Cudanov',NULL),
 (5,'Dusan','Barac',1),
-(6,'Dejan','Stojimirovic',NULL),
-(7,'Sinisa','Vlajic',NULL);
+(6,'Dejan','Stojimirovic',3),
+(7,'Sinisa','Vlajic',3);
 
 /*Table structure for table `drzevljanstvo` */
 
@@ -77,6 +77,8 @@ CREATE TABLE `grupazadatka` (
 insert  into `grupazadatka`(`brojGrupe`,`testID`) values 
 ('111',1),
 ('444',1),
+('4545',1),
+('876',1),
 ('222',2);
 
 /*Table structure for table `kandidat` */
@@ -97,6 +99,9 @@ CREATE TABLE `kandidat` (
   `sifraSS` int(11) DEFAULT NULL,
   `nacionalnostID` int(11) DEFAULT NULL,
   `ukupanRezultat` double DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `brBodovaIzSkole` double DEFAULT NULL,
+  `smer` int(11) DEFAULT NULL,
   PRIMARY KEY (`jmbg`),
   KEY `drzevljanstvoID` (`drzavljanstvoID`),
   KEY `sifraZanimanjaRoditelja` (`sifraZanimanjaRoditelja`),
@@ -110,13 +115,15 @@ CREATE TABLE `kandidat` (
 
 /*Data for the table `kandidat` */
 
-insert  into `kandidat`(`prezime`,`sifraPrijave`,`jmbg`,`imeRoditelja`,`ime`,`pol`,`mobilni`,`fiksni`,`drzavljanstvoID`,`sifraZanimanjaRoditelja`,`sifraSS`,`nacionalnostID`,`ukupanRezultat`) values 
-('Bor','5652','1203444444446','Bor','Bor','Muski','+6520689596245','+6520652159632',1,100,200,300,0),
-('vhjvnn','456','1210121222122','kjh','jbn','Zenski','+652656562456','+895221653248',1,100,200,300,0),
-('Mikic','222','2011992767032','M','Mika','Zenski','0657878787','021678765',1,100,200,300,65),
-('Peric','111','3008994767032','P','Pera','Muski','06111111111','01111111111',1,100,200,300,66),
-('Mladenovic','7777','3112215648886','Bora','Marija','Zenski','+659658821354','+6268952626164',1,100,200,300,0),
-('joka',NULL,'99999999','joka','joka','Zenski','888888888','888888888',NULL,NULL,NULL,NULL,0);
+insert  into `kandidat`(`prezime`,`sifraPrijave`,`jmbg`,`imeRoditelja`,`ime`,`pol`,`mobilni`,`fiksni`,`drzavljanstvoID`,`sifraZanimanjaRoditelja`,`sifraSS`,`nacionalnostID`,`ukupanRezultat`,`email`,`brBodovaIzSkole`,`smer`) values 
+('njervj','414','1111111111111','nfjern','dnjcd','Muski','+543783','+337873886',1,100,200,300,NULL,'fdbd@gamil.com',40,1),
+('Bor','5652','1203444444446','Bor','Bor','Muski','+6520689596245','+6520652159632',1,100,200,300,0,NULL,NULL,NULL),
+('vhjvnn','456','1210121222122','kjh','jbn','Zenski','+652656562456','+895221653248',1,100,200,300,0,NULL,NULL,NULL),
+('Aleksic','45223','1210999564678','Mirko','Jovana','Zenski','+381656586326','+38117458623',1,100,200,300,NULL,NULL,NULL,NULL),
+('Mikic','222','2011992767032','M','Mika','Zenski','0657878787','021678765',1,100,200,300,65,NULL,NULL,NULL),
+('Peric','111','3008994767032','P','Pera','Muski','06111111111','01111111111',1,100,200,300,66,NULL,NULL,NULL),
+('Mladenovic','7777','3112215648886','Bora','Marija','Zenski','+659658821354','+6268952626164',1,100,200,300,0,NULL,NULL,NULL),
+('joka',NULL,'99999999','joka','joka','Zenski','888888888','888888888',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL);
 
 /*Table structure for table `karton` */
 
@@ -146,7 +153,8 @@ insert  into `karton`(`brojUnosa`,`kartonID`,`brojKartona`,`kandidatID`,`rezulta
 (1,5,777,'2011992767032',85,'222'),
 (2,6,777,NULL,NULL,'222'),
 (1,7,446,'3112215648886',0,'111'),
-(2,8,446,NULL,NULL,'111');
+(2,8,446,NULL,NULL,'111'),
+(1,9,777,NULL,NULL,'111');
 
 /*Table structure for table `komisija` */
 
@@ -163,7 +171,8 @@ CREATE TABLE `komisija` (
 
 insert  into `komisija`(`komisijaID`,`user`,`password`) values 
 (1,'kom1','k1'),
-(2,'kom2','k2');
+(2,'kom2','k2'),
+(3,'kom5','komisija5');
 
 /*Table structure for table `nacionalnost` */
 
@@ -233,7 +242,7 @@ CREATE TABLE `resenje` (
   PRIMARY KEY (`resenjeID`),
   KEY `brojGrupe` (`brojGrupe`),
   CONSTRAINT `resenje_ibfk_1` FOREIGN KEY (`brojGrupe`) REFERENCES `grupazadatka` (`brojGrupe`)
-) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=latin1;
 
 /*Data for the table `resenje` */
 
@@ -307,7 +316,47 @@ insert  into `resenje`(`resenjeID`,`rbZadatka`,`odgovor`,`brojGrupe`) values
 (137,17,'B','444'),
 (138,18,'B','444'),
 (139,19,'B','444'),
-(140,20,'B','444');
+(140,20,'B','444'),
+(141,1,'A','4545'),
+(142,2,'B','4545'),
+(143,3,'B','4545'),
+(144,4,'B','4545'),
+(145,5,'B','4545'),
+(146,6,'B','4545'),
+(147,7,'B','4545'),
+(148,8,'B','4545'),
+(149,9,'E','4545'),
+(150,10,'C','4545'),
+(151,11,'D','4545'),
+(152,12,'E','4545'),
+(153,13,'A','4545'),
+(154,14,'A','4545'),
+(155,15,'A','4545'),
+(156,16,'A','4545'),
+(157,17,'A','4545'),
+(158,18,'A','4545'),
+(159,19,'A','4545'),
+(160,20,'A','4545'),
+(161,1,'A','876'),
+(162,2,'B','876'),
+(163,3,'B','876'),
+(164,4,'B','876'),
+(165,5,'B','876'),
+(166,6,'B','876'),
+(167,7,'B','876'),
+(168,8,'B','876'),
+(169,9,'E','876'),
+(170,10,'C','876'),
+(171,11,'D','876'),
+(172,12,'E','876'),
+(173,13,'A','876'),
+(174,14,'A','876'),
+(175,15,'A','876'),
+(176,16,'A','876'),
+(177,17,'A','876'),
+(178,18,'A','876'),
+(179,19,'A','876'),
+(180,20,'A','876');
 
 /*Table structure for table `sluzbenik` */
 
@@ -414,7 +463,7 @@ CREATE TABLE `zadatak` (
   `zadatakID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`kartonID`,`zadatakID`),
   KEY `zadatakID` (`zadatakID`)
-) ENGINE=InnoDB AUTO_INCREMENT=321 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=341 DEFAULT CHARSET=latin1;
 
 /*Data for the table `zadatak` */
 
@@ -598,7 +647,27 @@ insert  into `zadatak`(`kartonID`,`rbZadatka`,`odgovor`,`zadatakID`) values
 (8,17,'B',317),
 (8,18,'B',318),
 (8,19,'B',319),
-(8,20,'B',320);
+(8,20,'B',320),
+(9,1,'A',321),
+(9,2,'B',322),
+(9,3,'C',323),
+(9,4,'D',324),
+(9,5,'A',325),
+(9,6,'B',326),
+(9,7,'C',327),
+(9,8,'C',328),
+(9,9,'C',329),
+(9,10,'C',330),
+(9,11,'A',331),
+(9,12,'A',332),
+(9,13,'D',333),
+(9,14,'D',334),
+(9,15,'C',335),
+(9,16,'B',336),
+(9,17,'A',337),
+(9,18,'A',338),
+(9,19,'A',339),
+(9,20,'A',340);
 
 /*Table structure for table `zanimanjeroditelja` */
 
