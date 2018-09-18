@@ -721,21 +721,40 @@ public class Kontroler {
                 int brojac = kart.getListaOdg().size();
                 ArrayList<Resenje> resenja = (ArrayList<Resenje>) kart.getGrupaZadataka().getListaResenihZadataka();
                 ArrayList<Zadatak> zadaci = kart.getListaOdg();
-                for (int i = 0; i < brojac; i++) {
-                    char res = resenja.get(i).getOdgovor();
-                    char zad = zadaci.get(i).getOdgovor();
-                    if (zad == res) {
-                        suma += 5;
-                    } else {
-                        if (zad == 'N') {
-                            suma += 0;
+                if (brojac == 20) {
+                    for (int i = 0; i < brojac; i++) {
+                        char res = resenja.get(i).getOdgovor();
+                        char zad = zadaci.get(i).getOdgovor();
+                        if (zad == res) {
+                            suma += 5;
                         } else {
-                            suma -= 3;
+                            if (zad == 'N') {
+                                suma += 0;
+                            } else {
+                                suma -= 0.5;
+                            }
                         }
                     }
-                }
-                if (suma < 0) {
-                    suma = 0;
+                    if (suma < 0) {
+                        suma = 0;
+                    }
+                }else{
+                    for (int i = 0; i < brojac; i++) {
+                        char res = resenja.get(i).getOdgovor();
+                        char zad = zadaci.get(i).getOdgovor();
+                        if (zad == res) {
+                            suma += 1;
+                        } else {
+                            if (zad == 'N') {
+                                suma += 0;
+                            } else {
+                                suma -= 0.5;
+                            }
+                        }
+                    }
+                    if (suma < 0) {
+                        suma = 0;
+                    }
                 }
 
                 db.upisiRezultat(kart.getKartonID(), suma);
@@ -828,7 +847,7 @@ public class Kontroler {
         return kandidati;
     }
 
-    public void upisiKandidatuPoene(int suma, String jmbg) {
+    public void upisiKandidatuPoene(double suma, String jmbg) {
 
         try {
             db.ucitajDriver();
@@ -884,12 +903,13 @@ public class Kontroler {
         try {
             db.ucitajDriver();
             db.otvoriKonekciju();
+            int rlID = db.sacuvajRangListu(rl);
             ArrayList<Stavka_Rang_Liste> stavke = rl.getStavke();
             for (Stavka_Rang_Liste srl : stavke) {
-                db.sacuvajStavku(srl, rl.getSifraRL());
+                db.sacuvajStavku(srl, rlID);
             }
 
-            db.sacuvajRangListu(rl);
+            
             db.commit();
             uspesno = true;
 
@@ -931,7 +951,7 @@ public class Kontroler {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             try {
                 db.zatvoriKonekciju();
             } catch (SQLException ex) {
@@ -939,6 +959,90 @@ public class Kontroler {
             }
         }
         return sluzbs;
+    }
+
+    public ArrayList<Kandidat> vratiKandidateZaISIT() {
+        ArrayList<Kandidat> kandidati = null;
+
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kandidati = db.vratiSveKandidateZaISIT();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return kandidati;
+    }
+
+    public ArrayList<Kandidat> vratiKandidateZaMen() {
+        ArrayList<Kandidat> kandidati = null;
+
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kandidati = db.vratiSveKandidateZaMen();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return kandidati;
+    }
+
+    public ArrayList<Kandidat> vratiKandidateZaDalj() {
+        ArrayList<Kandidat> kandidati = null;
+
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            kandidati = db.vratiSveKandidateZaDalj();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return kandidati;
+    }
+
+    public ArrayList<Rang_Lista> vratiRangListe() {
+        ArrayList<Rang_Lista> liste = null;
+
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            liste = db.vratiSveRangListe();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return liste;
     }
 
 }

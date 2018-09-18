@@ -608,6 +608,7 @@ public class DBBroker {
            String pol =rs.getString("pol");
            String mobilni =rs.getString("mobilni");
            String fiksni =rs.getString("fiksni");
+           double bodoviSkola = rs.getDouble("brBodovaIzSkole");
             
             Kandidat kandidat = new Kandidat();
             kandidat.setFiksni(fiksni);
@@ -618,12 +619,13 @@ public class DBBroker {
             kandidat.setSifraPrijave(sifraPrijave);
             kandidat.setMobilni(mobilni);
             kandidat.setImeRoditelja(imeRoditelja);
+            kandidat.setBrBodovaIzSkole(bodoviSkola);
             kandidati.add(kandidat);
         }
         return kandidati;
     }
 
-    public void upisiKandidatuPoene(int suma, String jmbg) throws SQLException {
+    public void upisiKandidatuPoene(double suma, String jmbg) throws SQLException {
         String upit = "update kandidat set ukupanRezultat= " + suma+" where jmbg = '" + jmbg + "'";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.executeUpdate();
@@ -660,21 +662,25 @@ public class DBBroker {
         return kandidati;
     }
 
-    public void sacuvajStavku(Stavka_Rang_Liste srl, String sifraRL) throws SQLException {
-        String upit = "INSERT INTO stavka_rang_liste(sifraRL, redniBroj, jmbg) VALUES(?,?,?)";
+    public void sacuvajStavku(Stavka_Rang_Liste srl, int rlID) throws SQLException {
+        String upit = "INSERT INTO stavka_rang_liste(rlID, redniBroj, jmbg, brojPoena) VALUES(?,?,?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
-        ps.setString(1, sifraRL);
+        ps.setInt(1, rlID);
         ps.setInt(2, srl.getRedniBroj());
         ps.setString(3, srl.getKandidat().getJmbg());
+        ps.setDouble(4, srl.getBrojPoena());
         ps.executeUpdate();
     }
 
-    public void sacuvajRangListu(Rang_Lista rl) throws SQLException {
-        String upit = "INSERT INTO rang_lista(sifraRL, godina) VALUES(?,?)";
+    public int sacuvajRangListu(Rang_Lista rl) throws SQLException {
+        int id = 0;
+        String upit = "INSERT INTO rang_lista(godina, smer) VALUES(?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
-        ps.setString(1, rl.getSifraRL());
-        ps.setInt(2, rl.getGodina());
+        ps.setInt(1, rl.getGodina());
+        ps.setString(2, rl.getSmer());
         ps.executeUpdate();
+        id = vratiMaxIDRL();
+        return id;
     }
 
     public ArrayList<Sluzbenik> vratiSluzbenike() throws SQLException {
@@ -690,6 +696,164 @@ public class DBBroker {
             sluzbs.add(s);
         }
         return sluzbs;
+    }
+
+    public ArrayList<Kandidat> vratiSveKandidateZaISIT() throws SQLException {
+        ArrayList<Kandidat> kandidati = new ArrayList<>();
+        String upit = "select * from kandidat where smer=1 or smer = 4 order by ukupanRezultat desc";
+        Statement stat = konekcija.createStatement();
+        ResultSet rs = stat.executeQuery(upit);
+        while(rs.next()){
+            String prezime =rs.getString("prezime");
+           String sifraPrijave =rs.getString("sifraPrijave");
+           String jmbg =rs.getString("jmbg");
+           String imeRoditelja =rs.getString("imeRoditelja");
+           String ime =rs.getString("ime");
+           String pol =rs.getString("pol");
+           String mobilni =rs.getString("mobilni");
+           String fiksni =rs.getString("fiksni");
+           int ur = rs.getInt("ukupanRezultat");
+            
+            Kandidat kandidat = new Kandidat();
+            kandidat.setUkupanBrojPoena(ur);
+            kandidat.setFiksni(fiksni);
+            kandidat.setJmbg(jmbg);
+            kandidat.setIme(ime);
+            kandidat.setPol(pol);
+            kandidat.setPrezime(prezime);
+            kandidat.setSifraPrijave(sifraPrijave);
+            kandidat.setMobilni(mobilni);
+            kandidat.setImeRoditelja(imeRoditelja);
+            kandidati.add(kandidat);
+        }
+        return kandidati;
+    }
+
+    private int vratiMaxIDRL() throws SQLException {
+        int id = 0;
+        String upit = "SELECT MAX(rlID) as max FROM rang_lista";
+        Statement s = konekcija.createStatement();
+        ResultSet rs = s.executeQuery(upit);
+        while (rs.next()) {
+            id = rs.getInt(1);
+        }
+        return id;
+    }
+
+    public ArrayList<Kandidat> vratiSveKandidateZaMen() throws SQLException {
+         ArrayList<Kandidat> kandidati = new ArrayList<>();
+        String upit = "select * from kandidat where smer=2 or smer = 4 order by ukupanRezultat desc";
+        Statement stat = konekcija.createStatement();
+        ResultSet rs = stat.executeQuery(upit);
+        while(rs.next()){
+            String prezime =rs.getString("prezime");
+           String sifraPrijave =rs.getString("sifraPrijave");
+           String jmbg =rs.getString("jmbg");
+           String imeRoditelja =rs.getString("imeRoditelja");
+           String ime =rs.getString("ime");
+           String pol =rs.getString("pol");
+           String mobilni =rs.getString("mobilni");
+           String fiksni =rs.getString("fiksni");
+           int ur = rs.getInt("ukupanRezultat");
+            
+            Kandidat kandidat = new Kandidat();
+            kandidat.setUkupanBrojPoena(ur);
+            kandidat.setFiksni(fiksni);
+            kandidat.setJmbg(jmbg);
+            kandidat.setIme(ime);
+            kandidat.setPol(pol);
+            kandidat.setPrezime(prezime);
+            kandidat.setSifraPrijave(sifraPrijave);
+            kandidat.setMobilni(mobilni);
+            kandidat.setImeRoditelja(imeRoditelja);
+            kandidati.add(kandidat);
+        }
+        return kandidati;
+    }
+
+    public ArrayList<Kandidat> vratiSveKandidateZaDalj() throws SQLException {
+        ArrayList<Kandidat> kandidati = new ArrayList<>();
+        String upit = "select * from kandidat where smer=3 or smer = 4 order by ukupanRezultat desc";
+        Statement stat = konekcija.createStatement();
+        ResultSet rs = stat.executeQuery(upit);
+        while(rs.next()){
+            String prezime =rs.getString("prezime");
+           String sifraPrijave =rs.getString("sifraPrijave");
+           String jmbg =rs.getString("jmbg");
+           String imeRoditelja =rs.getString("imeRoditelja");
+           String ime =rs.getString("ime");
+           String pol =rs.getString("pol");
+           String mobilni =rs.getString("mobilni");
+           String fiksni =rs.getString("fiksni");
+           int ur = rs.getInt("ukupanRezultat");
+            
+            Kandidat kandidat = new Kandidat();
+            kandidat.setUkupanBrojPoena(ur);
+            kandidat.setFiksni(fiksni);
+            kandidat.setJmbg(jmbg);
+            kandidat.setIme(ime);
+            kandidat.setPol(pol);
+            kandidat.setPrezime(prezime);
+            kandidat.setSifraPrijave(sifraPrijave);
+            kandidat.setMobilni(mobilni);
+            kandidat.setImeRoditelja(imeRoditelja);
+            kandidati.add(kandidat);
+        }
+        return kandidati;
+    }
+
+    public ArrayList<Rang_Lista> vratiSveRangListe() throws SQLException {
+        ArrayList<Rang_Lista> rang_liste = new ArrayList<>();
+        String upit = "select * from rang_lista";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while(rs.next()){
+            int id = rs.getInt("rlID");
+            int godina = rs.getInt("godina");
+            String naziv = rs.getString("smer");
+            ArrayList<Stavka_Rang_Liste> stavke = vratiStavkeRangListe(id);
+            Rang_Lista rl = new Rang_Lista(naziv, godina);
+            rl.setStavke(stavke);
+            rang_liste.add(rl);
+        }
+        return rang_liste;
+    }
+
+    private ArrayList<Stavka_Rang_Liste> vratiStavkeRangListe(int id) throws SQLException {
+        ArrayList<Stavka_Rang_Liste> stavke = new ArrayList<>();
+        String upit = "SELECT * FROM stavka_rang_liste s JOIN kandidat k ON s.jmbg = k.jmbg WHERE s.rlID = " + id + " order by redniBroj asc";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while(rs.next()){
+             String prezime =rs.getString("prezime");
+           String sifraPrijave =rs.getString("sifraPrijave");
+           String jmbg =rs.getString("k.jmbg");
+           String imeRoditelja =rs.getString("imeRoditelja");
+           String ime =rs.getString("ime");
+           String pol =rs.getString("pol");
+           String mobilni =rs.getString("mobilni");
+           String fiksni =rs.getString("fiksni");
+           int ur = rs.getInt("ukupanRezultat");
+            
+            Kandidat kandidat = new Kandidat();
+            kandidat.setUkupanBrojPoena(ur);
+            kandidat.setFiksni(fiksni);
+            kandidat.setJmbg(jmbg);
+            kandidat.setIme(ime);
+            kandidat.setPol(pol);
+            kandidat.setPrezime(prezime);
+            kandidat.setSifraPrijave(sifraPrijave);
+            kandidat.setMobilni(mobilni);
+            kandidat.setImeRoditelja(imeRoditelja);
+            int idR = rs.getInt("rlID");
+            int redB = rs.getInt("redniBroj");
+            double poeni = rs.getDouble("brojPoena");
+            Stavka_Rang_Liste srl = new Stavka_Rang_Liste(redB, kandidat);
+            srl.setBrojPoena(poeni);
+            stavke.add(srl);
+        }
+        
+        return stavke;
     }
     
     

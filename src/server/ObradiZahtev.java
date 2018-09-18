@@ -64,7 +64,7 @@ public class ObradiZahtev extends Thread {
 
                     } else {
                         so.setPoruka("Sluzbenik sa ovim korisnickim nalogom ne postoji!");
-                         so.setOdgovor("!!");
+                        so.setOdgovor("!!");
                     }
 
                     break;
@@ -107,7 +107,7 @@ public class ObradiZahtev extends Thread {
                         so.setOdgovor("!");
                     } else {
                         so.setPoruka("Neuspesno  promenjena komisija!");
-                         so.setOdgovor("!");
+                        so.setOdgovor("!");
                     }
 
                     break;
@@ -248,32 +248,31 @@ public class ObradiZahtev extends Thread {
                     break;
                 case Operacije.SACUVAJ_KARTON_VERIFIKACIJA:
                     Karton kaa = (Karton) kz.getParametar();
-                    boolean sacuvao_kar=Kontroler.getInstance().promeniKarton(kaa);
+                    boolean sacuvao_kar = Kontroler.getInstance().promeniKarton(kaa);
                     if (sacuvao_kar) {
                         so.setPoruka("Karton je izmenjen ");
                     } else {
                         so.setPoruka("Karton nije izmenjen!");
                     }
                     break;
-                    
-                    
-                    case Operacije.IZMENI_ZADATKE:
-                        PomocIzmena pi = (PomocIzmena) kz.getParametar();
-                        boolean uspesnoIzmenjeno = Kontroler.getInstance().izmeniZadatke(pi);
-                        if (uspesnoIzmenjeno) {
+
+                case Operacije.IZMENI_ZADATKE:
+                    PomocIzmena pi = (PomocIzmena) kz.getParametar();
+                    boolean uspesnoIzmenjeno = Kontroler.getInstance().izmeniZadatke(pi);
+                    if (uspesnoIzmenjeno) {
                         so.setPoruka("Uspesno izmenjeni zadaci!");
                         so.setOdgovor("!");
                     } else {
                         so.setPoruka("Neuspesno  izmenjeni zadaci!");
                         so.setOdgovor("!!");
                     }
-                       break;
-                       
-                    case Operacije.SPOJ_KARTONE:
-                        
-                        so = Kontroler.getInstance().spojKartone();
                     break;
-                    
+
+                case Operacije.SPOJ_KARTONE:
+
+                    so = Kontroler.getInstance().spojKartone();
+                    break;
+
                 case Operacije.VRATI_KARTONE_PROVERA:
                     int kartonskiBroj = (int) kz.getParametar();
                     ArrayList<Karton> kartoniProvera = Kontroler.getInstance().vratiKartoneYaProveru(kartonskiBroj);
@@ -285,80 +284,272 @@ public class ObradiZahtev extends Thread {
 
                     }
                     break;
-                    
-                       
-                    case Operacije.IZRACUNAJ_POENE:
-                        
-                        so = Kontroler.getInstance().izracunajPoene();
+
+                case Operacije.IZRACUNAJ_POENE:
+
+                    so = Kontroler.getInstance().izracunajPoene();
                     break;
-                    
-                    case Operacije.NAPRAVI_RANG_LISTU:
+
+                case Operacije.NADJI_PRIJAVLJENOG:
+
+                    so.setOdgovor(null);
+                    String[] nizz = new String[2];
+                    nizz = (String[]) kz.getParametar();
+                    ArrayList<Sluzbenik> sluzbenici = Kontroler.getInstance().vratiSveSluzbenike();
+                    for (Sluzbenik sluzbenik : sluzbenici) {
+                        if (sluzbenik.getUsername().equals(nizz[0]) && sluzbenik.getPassword().equals(nizz[1])) {
+                            so.setOdgovor(sluzbenik);
+                        }
+                    }
+                    if (so.getOdgovor() == null) {
+                        ArrayList<Komisija> koms = Kontroler.getInstance().vratiSveKomisije();
+                        for (Komisija komis : koms) {
+                            if (komis.getUsername().equals(nizz[0]) && komis.getPassword().equals(nizz[1])) {
+                                so.setOdgovor(komis);
+                            }
+                        }
+                    }
+                    break;
+                case Operacije.KREIRAJ_RL_ISIT:
+
+                    boolean postojiRLisit = false;
+                    ArrayList<Rang_Lista> rangListe = Kontroler.getInstance().vratiRangListe();
+                    for (Rang_Lista rngL : rangListe) {
+                        if (rngL.getSmer().equals("Informacioni sistemi i tehnologije")) {
+                            postojiRLisit = true;
+                            so.setPoruka("Rang lista vec postoji");
+                            so.setOdgovor(rngL);
+                        }
+                    }
+                    if (postojiRLisit == false) {
                         ArrayList<Karton> kartoni = Kontroler.getInstance().vratiSveKartone();
                         ArrayList<Kandidat> kandidati = Kontroler.getInstance().vratiSveKandidate();
                         for (Kandidat kandidat1 : kandidati) {
-                            int suma = 0;
+
                             int brojac = 0;
+                            double suma = 0;
                             for (Karton kartonn : kartoni) {
-                                if(kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())){
+                                if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())) {
                                     brojac++;
-                                    suma+=kartonn.getRezultatTesta();
                                 }
                             }
-                            if(brojac>1){
-                                suma = (int) (suma*0.5);
+                            if (brojac == 1) {
+                                for (Karton kartonn : kartoni) {
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())) {
+                                        suma += kartonn.getRezultatTesta();
+                                    }
+                                }
+                                suma = suma * 0.6;
+                            } else {
+                                for (Karton kartonn : kartoni) {
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())
+                                            && kartonn.getGrupaZadataka().getTest().getNazivTesta().equals("Matematika")) {
+                                        suma = suma + (0.3 * kartonn.getRezultatTesta());
+                                    }
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())
+                                            && kartonn.getGrupaZadataka().getTest().getNazivTesta().equals("Test opste informisanosti")) {
+                                        suma += kartonn.getRezultatTesta();
+                                    }
+                                }
                             }
-                            if(suma<0){
-                                suma = 0;
-                            }
-                            
+                            suma += kandidat1.getBrBodovaIzSkole();
+
                             Kontroler.getInstance().upisiKandidatuPoene(suma, kandidat1.getJmbg());
                         }
 
-                            ArrayList<Kandidat> kandids = Kontroler.getInstance().vratiKandidateZaRL();
+                        ArrayList<Kandidat> kandids = Kontroler.getInstance().vratiKandidateZaISIT();
 
-                            Rang_Lista rl = new Rang_Lista();
-                            ArrayList<Stavka_Rang_Liste> stavke = new ArrayList<>();
-                            int rb = 1;
+                        Rang_Lista rl = new Rang_Lista();
+                        ArrayList<Stavka_Rang_Liste> stavke = new ArrayList<>();
+                        int rb = 0;
+                        double prethodni = 1000;
 
-                            for (Kandidat kd : kandids) {
-                                Stavka_Rang_Liste srl = new Stavka_Rang_Liste();
-                                srl.setKandidat(kd);
-                                srl.setRedniBroj(rb);
-                                stavke.add(srl);
+                        for (Kandidat kd : kandids) {
+                            Stavka_Rang_Liste srl = new Stavka_Rang_Liste();
+                            srl.setKandidat(kd);
+                            if (kd.getUkupanBrojPoena() < prethodni) {
                                 rb++;
                             }
-                            rl.setStavke(stavke);
-                            LocalDate ld = LocalDate.now();
-                            rl.setGodina(ld.getYear());
-                            rl.setSifraRL("sifra");
-                            boolean uspesnoNapravljenaRangLista = Kontroler.getInstance().sacuvajRangListu(rl);
-                            so.setOdgovor(rl);
-                            if(uspesnoNapravljenaRangLista){
-                                so.setPoruka("Uspesno napravljena rang-lista");
-                            }else{
-                                so.setPoruka("Nesto nije u redu");
+                            srl.setRedniBroj(rb);
+                            srl.setBrojPoena(kd.getUkupanBrojPoena());
+                            stavke.add(srl);
+                            prethodni = kd.getUkupanBrojPoena();
+                        }
+                        rl.setStavke(stavke);
+                        LocalDate ld = LocalDate.now();
+                        rl.setGodina(ld.getYear());
+                        rl.setSmer("Informacioni sistemi i tehnologije");
+                        boolean uspesnoNapravljenaRangLista = Kontroler.getInstance().sacuvajRangListu(rl);
+                        so.setOdgovor(rl);
+                        if (uspesnoNapravljenaRangLista) {
+                            so.setPoruka("Uspesno napravljena rang-lista");
+                        } else {
+                            so.setPoruka("Nesto nije u redu");
+                        }
+                    }
+
+                    break;
+                case Operacije.KREIRAJ_RL_MEN:
+
+                    boolean postojiRLmen = false;
+                    ArrayList<Rang_Lista> rangListe2 = Kontroler.getInstance().vratiRangListe();
+                    for (Rang_Lista rngL : rangListe2) {
+                        if (rngL.getSmer().equals("Menadzment")) {
+                            postojiRLmen = true;
+                            so.setPoruka("Rang lista vec postoji");
+                            so.setOdgovor(rngL);
+                        }
+                    }
+                    if (postojiRLmen == false) {
+
+                        ArrayList<Karton> kartoniM = Kontroler.getInstance().vratiSveKartone();
+                        ArrayList<Kandidat> kandidatiM = Kontroler.getInstance().vratiSveKandidate();
+                        for (Kandidat kandidat1 : kandidatiM) {
+
+                            int brojac = 0;
+                            double suma = 0;
+                            for (Karton kartonn : kartoniM) {
+                                if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())) {
+                                    brojac++;
+                                }
                             }
-                        break;
-                    case Operacije.NADJI_PRIJAVLJENOG:
-                        
-                        so.setOdgovor(null);
-                        String[] nizz = new String[2];
-                        nizz = (String[]) kz.getParametar();
-                        ArrayList<Sluzbenik> sluzbenici = Kontroler.getInstance().vratiSveSluzbenike();
-                        for (Sluzbenik sluzbenik : sluzbenici) {
-                          if(sluzbenik.getUsername().equals(nizz[0]) && sluzbenik.getPassword().equals(nizz[1])){
-                              so.setOdgovor(sluzbenik);
-                          }  
+                            if (brojac == 1) {
+                                for (Karton kartonn : kartoniM) {
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())) {
+                                        suma += kartonn.getRezultatTesta();
+                                    }
+                                }
+                                suma = suma * 0.6;
+                            } else {
+                                for (Karton kartonn : kartoniM) {
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())
+                                            && kartonn.getGrupaZadataka().getTest().getNazivTesta().equals("Matematika")) {
+                                        suma = suma + (0.3 * kartonn.getRezultatTesta());
+                                    }
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())
+                                            && kartonn.getGrupaZadataka().getTest().getNazivTesta().equals("Test opste informisanosti")) {
+                                        suma += kartonn.getRezultatTesta();
+                                    }
+                                }
+                            }
+                            suma += kandidat1.getBrBodovaIzSkole();
+
+                            Kontroler.getInstance().upisiKandidatuPoene(suma, kandidat1.getJmbg());
                         }
-                        if(so.getOdgovor()==null){
-                        ArrayList<Komisija> koms = Kontroler.getInstance().vratiSveKomisije();
-                        for (Komisija komis : koms) {
-                            if(komis.getUsername().equals(nizz[0]) && komis.getPassword().equals(nizz[1])){
-                              so.setOdgovor(komis);
-                          }  
+
+                        ArrayList<Kandidat> kandidsM = Kontroler.getInstance().vratiKandidateZaMen();
+
+                        Rang_Lista rlM = new Rang_Lista();
+                        ArrayList<Stavka_Rang_Liste> stavkeM = new ArrayList<>();
+                        int rbM = 0;
+                        double prethodniM = 1000;
+
+                        for (Kandidat kd : kandidsM) {
+                            Stavka_Rang_Liste srl = new Stavka_Rang_Liste();
+                            srl.setKandidat(kd);
+                            if (kd.getUkupanBrojPoena() < prethodniM) {
+                                rbM++;
+                            }
+                            srl.setRedniBroj(rbM);
+                            srl.setBrojPoena(kd.getUkupanBrojPoena());
+                            stavkeM.add(srl);
+                            prethodniM = kd.getUkupanBrojPoena();
                         }
+                        rlM.setStavke(stavkeM);
+                        LocalDate ldM = LocalDate.now();
+                        rlM.setGodina(ldM.getYear());
+                        rlM.setSmer("Menadzment");
+                        boolean uspesnoNapravljenaRangListaM = Kontroler.getInstance().sacuvajRangListu(rlM);
+                        so.setOdgovor(rlM);
+                        if (uspesnoNapravljenaRangListaM) {
+                            so.setPoruka("Uspesno napravljena rang-lista");
+                        } else {
+                            so.setPoruka("Nesto nije u redu");
                         }
-                        break;
+                    }
+
+                    break;
+
+                case Operacije.KREIRAJ_RL_ISIT_DALJ:
+
+                    boolean postojiRLdalj = false;
+                    ArrayList<Rang_Lista> rangListeD = Kontroler.getInstance().vratiRangListe();
+                    for (Rang_Lista rngL : rangListeD) {
+                        if (rngL.getSmer().equals("Informacioni sistemi i tehnologije - sistem na daljinu")) {
+                            postojiRLdalj = true;
+                            so.setPoruka("Rang lista vec postoji");
+                            so.setOdgovor(rngL);
+                        }
+                    }
+                    if (postojiRLdalj == false) {
+
+                        ArrayList<Karton> kartoniD = Kontroler.getInstance().vratiSveKartone();
+                        ArrayList<Kandidat> kandidatiD = Kontroler.getInstance().vratiSveKandidate();
+                        for (Kandidat kandidat1 : kandidatiD) {
+
+                            int brojac = 0;
+                            double suma = 0;
+                            for (Karton kartonn : kartoniD) {
+                                if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())) {
+                                    brojac++;
+                                }
+                            }
+                            if (brojac == 1) {
+                                for (Karton kartonn : kartoniD) {
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())) {
+                                        suma += kartonn.getRezultatTesta();
+                                    }
+                                }
+                                suma = suma * 0.6;
+                            } else {
+                                for (Karton kartonn : kartoniD) {
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())
+                                            && kartonn.getGrupaZadataka().getTest().getNazivTesta().equals("Matematika")) {
+                                        suma = suma + (0.3 * kartonn.getRezultatTesta());
+                                    }
+                                    if (kartonn.getKandidat().getJmbg().equals(kandidat1.getJmbg())
+                                            && kartonn.getGrupaZadataka().getTest().getNazivTesta().equals("Test opste informisanosti")) {
+                                        suma += kartonn.getRezultatTesta();
+                                    }
+                                }
+                            }
+                            suma += kandidat1.getBrBodovaIzSkole();
+
+                            Kontroler.getInstance().upisiKandidatuPoene(suma, kandidat1.getJmbg());
+                        }
+
+                        ArrayList<Kandidat> kandidsD = Kontroler.getInstance().vratiKandidateZaDalj();
+
+                        Rang_Lista rlD = new Rang_Lista();
+                        ArrayList<Stavka_Rang_Liste> stavkeD = new ArrayList<>();
+                        int rbD = 0;
+                        double prethodniD = 1000;
+
+                        for (Kandidat kd : kandidsD) {
+                            Stavka_Rang_Liste srl = new Stavka_Rang_Liste();
+                            srl.setKandidat(kd);
+                            if (kd.getUkupanBrojPoena() < prethodniD) {
+                                rbD++;
+                            }
+                            srl.setRedniBroj(rbD);
+                            srl.setBrojPoena(kd.getUkupanBrojPoena());
+                            stavkeD.add(srl);
+                            prethodniD = kd.getUkupanBrojPoena();
+                        }
+                        rlD.setStavke(stavkeD);
+                        LocalDate ldD = LocalDate.now();
+                        rlD.setGodina(ldD.getYear());
+                        rlD.setSmer("Informacioni sistemi i tehnologije - sistem na daljinu");
+                        boolean uspesnoNapravljenaRangListaD = Kontroler.getInstance().sacuvajRangListu(rlD);
+                        so.setOdgovor(rlD);
+                        if (uspesnoNapravljenaRangListaD) {
+                            so.setPoruka("Uspesno napravljena rang-lista");
+                        } else {
+                            so.setPoruka("Nesto nije u redu");
+                        }
+                    }
+
+                    break;
 
             }
             posaljiSO(so);
