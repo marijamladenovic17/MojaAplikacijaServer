@@ -1,6 +1,6 @@
 /*
-SQLyog Community v12.4.1 (64 bit)
-MySQL - 10.1.30-MariaDB : Database - mojaaplikacijanovo
+SQLyog Community v12.5.1 (64 bit)
+MySQL - 10.1.26-MariaDB : Database - mojaaplikacijanovo
 *********************************************************************
 */
 
@@ -184,6 +184,43 @@ insert  into `nacionalnost`(`nacionalnostID`,`naziv`) values
 (300,'Srbin'),
 (301,'Bosnjak');
 
+/*Table structure for table `obavestenje` */
+
+DROP TABLE IF EXISTS `obavestenje`;
+
+CREATE TABLE `obavestenje` (
+  `obavestenjeID` int(11) NOT NULL AUTO_INCREMENT,
+  `text` text,
+  `naslov` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`obavestenjeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+
+/*Data for the table `obavestenje` */
+
+insert  into `obavestenje`(`obavestenjeID`,`text`,`naslov`) values 
+(1,'nesto tamo',NULL),
+(2,'ajooooj',NULL),
+(3,'daaaaa',NULL),
+(4,'neeee',NULL),
+(5,'Jednom davo u jednom studenstskom domu, zivela je jedna kraljica Joka. Ona je bila jako umisljena, nije htela da se javi na hodniku. A isto je u tom domu zivela jedna mala Marija.\nOna je htela da se druzi sa Jokom, a Joka to nije znala. Kada je Joka saznala ona je svoje srce smeksala. I posto svaka prica ima\nsrecan kraj i ova ima svoj. One se danas druzi svaki dan i mnogo se vole.','Joka kraljica'),
+(6,'aiksd\nvgkejkvgwe\ngwthkw\ntgewywtdwftw','maki'),
+(7,'aiksd\nvgkejkvgwe\ngwthkw\ntgewywtdwftw','rfrreegf'),
+(8,'aiksd\nvgkejkvgwe\ngwthkw\ntgewywtdwftw','reggerg5'),
+(9,'aiksd\nvgkejkvgwe\ngwthkw\ntgewywtdwftw','rethr6hrtbdxhgbh');
+
+/*Table structure for table `rang` */
+
+DROP TABLE IF EXISTS `rang`;
+
+CREATE TABLE `rang` (
+  `brojKartona` int(11) DEFAULT NULL,
+  `rang` int(3) DEFAULT NULL,
+  `brojPoena` float DEFAULT NULL,
+  `redniBroj` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `rang` */
+
 /*Table structure for table `rang_lista` */
 
 DROP TABLE IF EXISTS `rang_lista`;
@@ -193,9 +230,14 @@ CREATE TABLE `rang_lista` (
   `godina` int(4) DEFAULT NULL,
   `smer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`rlID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 /*Data for the table `rang_lista` */
+
+insert  into `rang_lista`(`rlID`,`godina`,`smer`) values 
+(10,2018,'Informacioni sistemi i tehnologije'),
+(11,2018,'Menadzment'),
+(12,2018,'Informacioni sistemi i tehnologije - sistem na daljinu');
 
 /*Table structure for table `resenje` */
 
@@ -385,6 +427,13 @@ CREATE TABLE `stavka_rang_liste` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `stavka_rang_liste` */
+
+insert  into `stavka_rang_liste`(`rlID`,`redniBroj`,`jmbg`,`brojPoena`) values 
+(10,1,'0909995767032',98),
+(10,2,'0303995767042',63),
+(10,3,'0505995707632',49),
+(11,1,'0303995767042',63),
+(12,1,'0303995767042',63);
 
 /*Table structure for table `test` */
 
