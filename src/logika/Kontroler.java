@@ -1045,4 +1045,63 @@ public class Kontroler {
         return liste;
     }
 
+    public boolean ubaciObavestenje(String[] obavestenje) {
+       boolean ubacen = false;
+        try {
+
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            db.ubaciObavestenje(obavestenje);
+            ubacen = true;
+            db.commit();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                db.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                db.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return ubacen;
+    }
+
+    public ServerskiOdgovor vratiOdredjenuRL(String smer) {
+        ServerskiOdgovor so = new ServerskiOdgovor();
+        
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju();
+            Rang_Lista rl = db.vratiKonkretnuListu(smer);
+            so.setOdgovor(rl);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+        return so;
+    }
+
 }

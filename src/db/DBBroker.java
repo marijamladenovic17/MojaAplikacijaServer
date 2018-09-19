@@ -855,6 +855,31 @@ public class DBBroker {
         
         return stavke;
     }
+
+    public void ubaciObavestenje(String[] obavestenje) throws SQLException {
+         String upit = "INSERT INTO obavestenje(text,naslov) VALUES(?,?)";
+        PreparedStatement ps = konekcija.prepareStatement(upit);
+        ps.setString(1, obavestenje[0]);
+        ps.setString(2, obavestenje[1]);
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    public Rang_Lista vratiKonkretnuListu(String smer) throws SQLException {
+        Rang_Lista rl = null;
+        String upit = "select * from rang_lista where smer='"+smer+"'";
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+        while(rs.next()){
+            int id = rs.getInt("rlID");
+            int godina = rs.getInt("godina");
+            String naziv = rs.getString("smer");
+            ArrayList<Stavka_Rang_Liste> stavke = vratiStavkeRangListe(id);
+            rl = new Rang_Lista(naziv, godina);
+            rl.setStavke(stavke);
+        }
+        return rl;
+    }
     
     
 

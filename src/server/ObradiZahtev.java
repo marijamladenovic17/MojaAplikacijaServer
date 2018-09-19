@@ -550,6 +550,24 @@ public class ObradiZahtev extends Thread {
                     }
 
                     break;
+                     case Operacije.SACUVAJ_OBAVESTENJA:
+                         String[] obavestenje =  (String[]) kz.getParametar();
+                         boolean ubacen = Kontroler.getInstance().ubaciObavestenje(obavestenje);
+                         if(ubacen) {
+                             so.setPoruka("Uspesno");
+                         } else {
+                             so.setPoruka("Neuspesno");
+                         }
+                    
+                    break;
+                     case Operacije.VRATI_RANG_LISTU:
+                         String smer = (String) kz.getParametar();
+                         so = Kontroler.getInstance().vratiOdredjenuRL(smer);
+                         if(so.getOdgovor()==null){
+                             so.setPoruka("Neuspesno");
+                         }else{
+                             so.setPoruka("Uspesno");}
+                         break;
 
             }
             posaljiSO(so);
