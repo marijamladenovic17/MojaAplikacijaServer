@@ -67,6 +67,11 @@ public class DBBroker {
 
     }
 
+    public void otvoriKonekciju(String email_validation) throws SQLException {
+        konekcija = DriverManager.getConnection("jdbc:mysql://localhost:3306/email_validation", "root", "");
+        konekcija.setAutoCommit(false);
+    }
+
     public void zatvoriKonekciju() throws SQLException {
         konekcija.close();
     }
@@ -108,8 +113,8 @@ public class DBBroker {
             int idClana = rs.getInt(1);
             String ime = rs.getString(2);
             String prezime = rs.getString(3);
-            int komID= rs.getInt(4);
-            Clan c = new Clan(idClana, ime, prezime,komID);
+            int komID = rs.getInt(4);
+            Clan c = new Clan(idClana, ime, prezime, komID);
             System.out.println("Ubacen");
             listaClanova.add(c);
         }
@@ -125,7 +130,7 @@ public class DBBroker {
         ps.setInt(1, novaKom.getKomisijaID());
         ps.setString(2, novaKom.getUsername());
         ps.setString(3, novaKom.getPassword());
-        
+
         ps.executeUpdate();
         ps.close();
     }
@@ -161,8 +166,8 @@ public class DBBroker {
                 int idClana = rs.getInt(1);
                 String ime = rs.getString(2);
                 String prezime = rs.getString(3);
-                int komID= rs.getInt(4);
-                c = new Clan(idClana, ime, prezime,komID);
+                int komID = rs.getInt(4);
+                c = new Clan(idClana, ime, prezime, komID);
                 clanovi.add(c);
 
             }
@@ -306,21 +311,21 @@ public class DBBroker {
         while (rs.next()) {
             b = rs.getInt(1);
         }
-        return b+1;
+        return b + 1;
     }
 
     public ArrayList<GrupaZadatka> vratiGZ() throws SQLException {
         String upit = "SELECT * FROM grupazadatka";
         ArrayList<GrupaZadatka> listaGrupaZadatka = new ArrayList<>();
         Statement st = konekcija.createStatement();
-        
+
         ResultSet rs = st.executeQuery(upit);
 
         while (rs.next()) {
             int brGrupe = rs.getInt(1);
             int testID = rs.getInt(2);
             Test t = vratiTest(testID);
-            ArrayList<Resenje> listaRz= vratiListuRZ(brGrupe);
+            ArrayList<Resenje> listaRz = vratiListuRZ(brGrupe);
             GrupaZadatka gz = new GrupaZadatka(brGrupe, listaRz, t);
             listaGrupaZadatka.add(gz);
         }
@@ -330,74 +335,72 @@ public class DBBroker {
     }
 
     private Test vratiTest(int testID) throws SQLException {
-       String upit = "SELECT * FROM test WHERE testID="+testID;
-       Statement s = konekcija.createStatement();
-       ResultSet rs = s.executeQuery(upit);
-       Test t = new Test();
-       while(rs.next()){
-           int TestID= testID;
-           String naziv = rs.getString(2);
+        String upit = "SELECT * FROM test WHERE testID=" + testID;
+        Statement s = konekcija.createStatement();
+        ResultSet rs = s.executeQuery(upit);
+        Test t = new Test();
+        while (rs.next()) {
+            int TestID = testID;
+            String naziv = rs.getString(2);
             t.setTestID(TestID);
             t.setNazivTesta(naziv);
-       }
-               return t;
+        }
+        return t;
     }
 
     private ArrayList<Resenje> vratiListuRZ(int brGrupe) throws SQLException {
-       String upit = "SELECT * from resenje WHERE brojGrupe="+brGrupe;
-       ArrayList<Resenje> lr = new ArrayList<>();
-       Statement s = konekcija.createStatement();
-       ResultSet rs = s.executeQuery(upit);
-       while(rs.next()){
-           
-           int rbZadatka = rs.getInt(2);
-           String odg = rs.getString(3);
-           char odgovor = odg.charAt(0);
-           int bg = rs.getInt(4);
-           Resenje r = new Resenje(rbZadatka, odgovor);
-           lr.add(r);
-       }
-       rs.close();
-       s.close();
-       return lr;
+        String upit = "SELECT * from resenje WHERE brojGrupe=" + brGrupe;
+        ArrayList<Resenje> lr = new ArrayList<>();
+        Statement s = konekcija.createStatement();
+        ResultSet rs = s.executeQuery(upit);
+        while (rs.next()) {
+
+            int rbZadatka = rs.getInt(2);
+            String odg = rs.getString(3);
+            char odgovor = odg.charAt(0);
+            int bg = rs.getInt(4);
+            Resenje r = new Resenje(rbZadatka, odgovor);
+            lr.add(r);
+        }
+        rs.close();
+        s.close();
+        return lr;
     }
 
     public Kandidat vratiKandidata(String brojPrijave) throws SQLException {
-      String upit = "SELECT * from kandidat WHERE sifraPrijave='"+brojPrijave+"'";
-      Kandidat k = null;
-       Statement s = konekcija.createStatement();
-       ResultSet rs = s.executeQuery(upit);
-       while(rs.next()){
-           String prezime =rs.getString(1);
-           String sifraPrijave =rs.getString(2);
-           String jmbg =rs.getString(3);
-           String imeRoditelja =rs.getString(4);
-           String ime =rs.getString(5);
-           String pol =rs.getString(6);
-           String mobilni =rs.getString(7);
-           String fiksni =rs.getString(8);
-           k= new Kandidat();
-           k.setIme(ime);
-           k.setPrezime(prezime);
-           k.setSifraPrijave(brojPrijave);
-           k.setJmbg(jmbg);
-           
-           
-       }
-       rs.close();
-       s.close();
-       return k;
+        String upit = "SELECT * from kandidat WHERE sifraPrijave='" + brojPrijave + "'";
+        Kandidat k = null;
+        Statement s = konekcija.createStatement();
+        ResultSet rs = s.executeQuery(upit);
+        while (rs.next()) {
+            String prezime = rs.getString(1);
+            String sifraPrijave = rs.getString(2);
+            String jmbg = rs.getString(3);
+            String imeRoditelja = rs.getString(4);
+            String ime = rs.getString(5);
+            String pol = rs.getString(6);
+            String mobilni = rs.getString(7);
+            String fiksni = rs.getString(8);
+            k = new Kandidat();
+            k.setIme(ime);
+            k.setPrezime(prezime);
+            k.setSifraPrijave(brojPrijave);
+            k.setJmbg(jmbg);
+
+        }
+        rs.close();
+        s.close();
+        return k;
     }
 
     public void sacuvajKarton(Karton karton) throws SQLException {
-       String upit = "INSERT INTO karton(brojUnosa,kartonID,brojKartona,brojGrupe) VALUES(?,?,?,?)";
+        String upit = "INSERT INTO karton(brojUnosa,kartonID,brojKartona,brojGrupe) VALUES(?,?,?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
 
         ps.setInt(1, karton.getBrUnosa());
         ps.setInt(2, karton.getKartonID());
         ps.setInt(3, karton.getBrKartona());
         ps.setInt(4, karton.getGrupaZadataka().getBrGrupe());
-        
 
         ps.executeUpdate();
         ps.close();
@@ -414,31 +417,31 @@ public class DBBroker {
         return ++b;
     }
 
-    public void sacuvajODG(Zadatak zadatak,Karton k) throws SQLException {
+    public void sacuvajODG(Zadatak zadatak, Karton k) throws SQLException {
         String upit = "INSERT INTO zadatak(kartonID,rbZadatka,odgovor) VALUES(?,?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.setInt(1, k.getKartonID());
         ps.setInt(2, zadatak.getRbZadatka());
-        ps.setString(3, zadatak.getOdgovor()+"");
+        ps.setString(3, zadatak.getOdgovor() + "");
         ps.executeUpdate();
         ps.close();
     }
 
     public Karton vratiKarton(int kartBroj) throws SQLException {
         Karton kart = null;
-        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID WHERE k.brojKartona = " + kartBroj+" LIMIT 1";
+        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID WHERE k.brojKartona = " + kartBroj + " LIMIT 1";
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
         while (rs.next()) {
             Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
-            kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
+            kart = new Karton(rs.getInt("kartonID"), rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
             int kID = kart.getKartonID();
             ArrayList<Zadatak> zadaci = vratiZadatke(kID);
             kart.setListaOdg(zadaci);
             return kart;
         }
-        
+
         return kart;
     }
 
@@ -447,42 +450,42 @@ public class DBBroker {
         String upit = "SELECT * FROM zadatak WHERE kartonID =" + kID;
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
+        while (rs.next()) {
             Zadatak zad = new Zadatak(rs.getInt("rbZadatka"), rs.getString("odgovor").toUpperCase().charAt(0));
             zadaci.add(zad);
-                    
+
         }
-        
+
         return zadaci;
     }
-     public Karton vratiKartonUnosPrvi(int kartBroj) throws SQLException {
+
+    public Karton vratiKartonUnosPrvi(int kartBroj) throws SQLException {
         Karton kart = null;
-        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID WHERE k.brojKartona = " + kartBroj+" AND brojUnosa=1 LIMIT 1";
+        String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID WHERE k.brojKartona = " + kartBroj + " AND brojUnosa=1 LIMIT 1";
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
         while (rs.next()) {
             Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
-            kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona") , rs.getInt("brojUnosa"), gz, null);
+            kart = new Karton(rs.getInt("kartonID"), rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
             int kID = kart.getKartonID();
             ArrayList<Zadatak> zadaci = vratiZadatke(kID);
             kart.setListaOdg(zadaci);
             return kart;
         }
-        
+
         return kart;
     }
 
     public void izmeniKarton(Karton kaa) throws SQLException {
-       String upit = "UPDATE karton SET kandidatID='"+kaa.getKandidat().getJmbg()+"' WHERE kartonID="+kaa.getKartonID();
-       Statement s = konekcija.createStatement();
-       s.executeUpdate(upit);
-       
+        String upit = "UPDATE karton SET kandidatID='" + kaa.getKandidat().getJmbg() + "' WHERE kartonID=" + kaa.getKartonID();
+        Statement s = konekcija.createStatement();
+        s.executeUpdate(upit);
+
     }
-    
-    
+
     public void izmeniZadatak(Zadatak zadatak, int kartID) throws SQLException {
-        String upit = "UPDATE zadatak SET odgovor = '"+zadatak.getOdgovor()+"' WHERE kartonID = "+kartID+" AND rbZadatka ="+ zadatak.getRbZadatka();
+        String upit = "UPDATE zadatak SET odgovor = '" + zadatak.getOdgovor() + "' WHERE kartonID = " + kartID + " AND rbZadatka =" + zadatak.getRbZadatka();
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.executeUpdate();
     }
@@ -495,7 +498,7 @@ public class DBBroker {
         while (rs.next()) {
             Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
-            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
+            Karton kart = new Karton(rs.getInt("kartonID"), rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
             int kID = kart.getKartonID();
             ArrayList<Zadatak> zadaci = vratiZadatke(kID);
             kart.setListaOdg(zadaci);
@@ -505,20 +508,20 @@ public class DBBroker {
     }
 
     public ArrayList<Karton> vratiKartoneProvera(int kartonskiBroj) throws SQLException {
-         ArrayList<Karton> kartoni = new ArrayList<>();
+        ArrayList<Karton> kartoni = new ArrayList<>();
         String upit = "SELECT * FROM karton k JOIN grupazadatka g ON k.brojGrupe = g.brojGrupe JOIN test t ON g.testID = t.testID WHERE k.brojKartona = " + kartonskiBroj;
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
         while (rs.next()) {
             Test t = new Test(rs.getInt("t.testID"), rs.getString("nazivTesta"));
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
-            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
+            Karton kart = new Karton(rs.getInt("kartonID"), rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
             int kID = kart.getKartonID();
             ArrayList<Zadatak> zadaci = vratiZadatke(kID);
             kart.setListaOdg(zadaci);
             kartoni.add(kart);
         }
-        
+
         return kartoni;
     }
 
@@ -532,13 +535,13 @@ public class DBBroker {
             int brojG = rs.getInt("g.brojGrupe");
             ArrayList<Resenje> resenja = vratiResenjaGrupe(brojG);
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), resenja, t);
-            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
+            Karton kart = new Karton(rs.getInt("kartonID"), rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, null);
             int kID = kart.getKartonID();
             ArrayList<Zadatak> zadaci = vratiZadatke(kID);
             kart.setListaOdg(zadaci);
             kartoni.add(kart);
         }
-        
+
         return kartoni;
     }
 
@@ -547,29 +550,27 @@ public class DBBroker {
         String upit = "select * from resenje where brojGrupe =" + aInt;
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
-        while(rs.next()){
+        while (rs.next()) {
             Resenje r = new Resenje(rs.getInt("rbZadatka"), rs.getString("odgovor").toUpperCase().charAt(0));
             resenja.add(r);
         }
-        
+
         return resenja;
     }
 
     public void upisiRezultat(int kartonID, double suma) throws SQLException {
-        String upit = "UPDATE karton SET rezultatTesta ="+suma+" WHERE kartonID= "+kartonID+" AND brojUnosa = 1";
+        String upit = "UPDATE karton SET rezultatTesta =" + suma + " WHERE kartonID= " + kartonID + " AND brojUnosa = 1";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.executeUpdate();
     }
 
-   
-
     public void izmeniClan(Clan cl, Komisija novaKom) throws SQLException {
-       String upit = "UPDATE clan SET komisijaID="+novaKom.getKomisijaID()+" WHERE clanID="+cl.getClanID();
-       Statement s = konekcija.createStatement();
-       s.executeUpdate(upit);
+        String upit = "UPDATE clan SET komisijaID=" + novaKom.getKomisijaID() + " WHERE clanID=" + cl.getClanID();
+        Statement s = konekcija.createStatement();
+        s.executeUpdate(upit);
     }
-    
-    public void izmeniProperty(String key, String vrednost){
+
+    public void izmeniProperty(String key, String vrednost) {
         rp.upisiVrednost(key, vrednost);
     }
 
@@ -583,7 +584,7 @@ public class DBBroker {
             GrupaZadatka gz = new GrupaZadatka(rs.getInt("g.brojGrupe"), null, t);
             Kandidat kandidat = new Kandidat();
             kandidat.setJmbg(rs.getString("ka.jmbg"));
-            Karton kart = new Karton(rs.getInt("kartonID"),rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, kandidat);
+            Karton kart = new Karton(rs.getInt("kartonID"), rs.getInt("brojKartona"), rs.getInt("brojUnosa"), gz, kandidat);
             int kID = kart.getKartonID();
             double rezultat = rs.getDouble("rezultatTesta");
             kart.setRezultatTesta(rezultat);
@@ -599,17 +600,17 @@ public class DBBroker {
         String upit = "select * from kandidat";
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
-            String prezime =rs.getString("prezime");
-           String sifraPrijave =rs.getString("sifraPrijave");
-           String jmbg =rs.getString("jmbg");
-           String imeRoditelja =rs.getString("imeRoditelja");
-           String ime =rs.getString("ime");
-           String pol =rs.getString("pol");
-           String mobilni =rs.getString("mobilni");
-           String fiksni =rs.getString("fiksni");
-           double bodoviSkola = rs.getDouble("brBodovaIzSkole");
-            
+        while (rs.next()) {
+            String prezime = rs.getString("prezime");
+            String sifraPrijave = rs.getString("sifraPrijave");
+            String jmbg = rs.getString("jmbg");
+            String imeRoditelja = rs.getString("imeRoditelja");
+            String ime = rs.getString("ime");
+            String pol = rs.getString("pol");
+            String mobilni = rs.getString("mobilni");
+            String fiksni = rs.getString("fiksni");
+            double bodoviSkola = rs.getDouble("brBodovaIzSkole");
+
             Kandidat kandidat = new Kandidat();
             kandidat.setFiksni(fiksni);
             kandidat.setJmbg(jmbg);
@@ -626,27 +627,27 @@ public class DBBroker {
     }
 
     public void upisiKandidatuPoene(double suma, String jmbg) throws SQLException {
-        String upit = "update kandidat set ukupanRezultat= " + suma+" where jmbg = '" + jmbg + "'";
+        String upit = "update kandidat set ukupanRezultat= " + suma + " where jmbg = '" + jmbg + "'";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.executeUpdate();
     }
 
     public ArrayList<Kandidat> vratiSveKandidateZaRL() throws SQLException {
-         ArrayList<Kandidat> kandidati = new ArrayList<>();
+        ArrayList<Kandidat> kandidati = new ArrayList<>();
         String upit = "select * from kandidat order by ukupanRezultat desc";
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
-            String prezime =rs.getString("prezime");
-           String sifraPrijave =rs.getString("sifraPrijave");
-           String jmbg =rs.getString("jmbg");
-           String imeRoditelja =rs.getString("imeRoditelja");
-           String ime =rs.getString("ime");
-           String pol =rs.getString("pol");
-           String mobilni =rs.getString("mobilni");
-           String fiksni =rs.getString("fiksni");
-           int ur = rs.getInt("ukupanRezultat");
-            
+        while (rs.next()) {
+            String prezime = rs.getString("prezime");
+            String sifraPrijave = rs.getString("sifraPrijave");
+            String jmbg = rs.getString("jmbg");
+            String imeRoditelja = rs.getString("imeRoditelja");
+            String ime = rs.getString("ime");
+            String pol = rs.getString("pol");
+            String mobilni = rs.getString("mobilni");
+            String fiksni = rs.getString("fiksni");
+            int ur = rs.getInt("ukupanRezultat");
+
             Kandidat kandidat = new Kandidat();
             kandidat.setUkupanBrojPoena(ur);
             kandidat.setFiksni(fiksni);
@@ -688,7 +689,7 @@ public class DBBroker {
         String upit = "SELECT * FROM sluzbenik";
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
+        while (rs.next()) {
             String imePrezime = rs.getString("imePrezime");
             String username = rs.getString("username");
             String password = rs.getString("password");
@@ -703,17 +704,17 @@ public class DBBroker {
         String upit = "select * from kandidat where smer=1 or smer = 4 order by ukupanRezultat desc";
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
-            String prezime =rs.getString("prezime");
-           String sifraPrijave =rs.getString("sifraPrijave");
-           String jmbg =rs.getString("jmbg");
-           String imeRoditelja =rs.getString("imeRoditelja");
-           String ime =rs.getString("ime");
-           String pol =rs.getString("pol");
-           String mobilni =rs.getString("mobilni");
-           String fiksni =rs.getString("fiksni");
-           int ur = rs.getInt("ukupanRezultat");
-            
+        while (rs.next()) {
+            String prezime = rs.getString("prezime");
+            String sifraPrijave = rs.getString("sifraPrijave");
+            String jmbg = rs.getString("jmbg");
+            String imeRoditelja = rs.getString("imeRoditelja");
+            String ime = rs.getString("ime");
+            String pol = rs.getString("pol");
+            String mobilni = rs.getString("mobilni");
+            String fiksni = rs.getString("fiksni");
+            int ur = rs.getInt("ukupanRezultat");
+
             Kandidat kandidat = new Kandidat();
             kandidat.setUkupanBrojPoena(ur);
             kandidat.setFiksni(fiksni);
@@ -741,21 +742,21 @@ public class DBBroker {
     }
 
     public ArrayList<Kandidat> vratiSveKandidateZaMen() throws SQLException {
-         ArrayList<Kandidat> kandidati = new ArrayList<>();
+        ArrayList<Kandidat> kandidati = new ArrayList<>();
         String upit = "select * from kandidat where smer=2 or smer = 4 order by ukupanRezultat desc";
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
-            String prezime =rs.getString("prezime");
-           String sifraPrijave =rs.getString("sifraPrijave");
-           String jmbg =rs.getString("jmbg");
-           String imeRoditelja =rs.getString("imeRoditelja");
-           String ime =rs.getString("ime");
-           String pol =rs.getString("pol");
-           String mobilni =rs.getString("mobilni");
-           String fiksni =rs.getString("fiksni");
-           int ur = rs.getInt("ukupanRezultat");
-            
+        while (rs.next()) {
+            String prezime = rs.getString("prezime");
+            String sifraPrijave = rs.getString("sifraPrijave");
+            String jmbg = rs.getString("jmbg");
+            String imeRoditelja = rs.getString("imeRoditelja");
+            String ime = rs.getString("ime");
+            String pol = rs.getString("pol");
+            String mobilni = rs.getString("mobilni");
+            String fiksni = rs.getString("fiksni");
+            int ur = rs.getInt("ukupanRezultat");
+
             Kandidat kandidat = new Kandidat();
             kandidat.setUkupanBrojPoena(ur);
             kandidat.setFiksni(fiksni);
@@ -776,17 +777,17 @@ public class DBBroker {
         String upit = "select * from kandidat where smer=3 or smer = 4 order by ukupanRezultat desc";
         Statement stat = konekcija.createStatement();
         ResultSet rs = stat.executeQuery(upit);
-        while(rs.next()){
-            String prezime =rs.getString("prezime");
-           String sifraPrijave =rs.getString("sifraPrijave");
-           String jmbg =rs.getString("jmbg");
-           String imeRoditelja =rs.getString("imeRoditelja");
-           String ime =rs.getString("ime");
-           String pol =rs.getString("pol");
-           String mobilni =rs.getString("mobilni");
-           String fiksni =rs.getString("fiksni");
-           int ur = rs.getInt("ukupanRezultat");
-            
+        while (rs.next()) {
+            String prezime = rs.getString("prezime");
+            String sifraPrijave = rs.getString("sifraPrijave");
+            String jmbg = rs.getString("jmbg");
+            String imeRoditelja = rs.getString("imeRoditelja");
+            String ime = rs.getString("ime");
+            String pol = rs.getString("pol");
+            String mobilni = rs.getString("mobilni");
+            String fiksni = rs.getString("fiksni");
+            int ur = rs.getInt("ukupanRezultat");
+
             Kandidat kandidat = new Kandidat();
             kandidat.setUkupanBrojPoena(ur);
             kandidat.setFiksni(fiksni);
@@ -807,7 +808,7 @@ public class DBBroker {
         String upit = "select * from rang_lista";
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
-        while(rs.next()){
+        while (rs.next()) {
             int id = rs.getInt("rlID");
             int godina = rs.getInt("godina");
             String naziv = rs.getString("smer");
@@ -824,17 +825,17 @@ public class DBBroker {
         String upit = "SELECT * FROM stavka_rang_liste s JOIN kandidat k ON s.jmbg = k.jmbg WHERE s.rlID = " + id + " order by redniBroj asc";
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
-        while(rs.next()){
-             String prezime =rs.getString("prezime");
-           String sifraPrijave =rs.getString("sifraPrijave");
-           String jmbg =rs.getString("k.jmbg");
-           String imeRoditelja =rs.getString("imeRoditelja");
-           String ime =rs.getString("ime");
-           String pol =rs.getString("pol");
-           String mobilni =rs.getString("mobilni");
-           String fiksni =rs.getString("fiksni");
-           int ur = rs.getInt("ukupanRezultat");
-            
+        while (rs.next()) {
+            String prezime = rs.getString("prezime");
+            String sifraPrijave = rs.getString("sifraPrijave");
+            String jmbg = rs.getString("k.jmbg");
+            String imeRoditelja = rs.getString("imeRoditelja");
+            String ime = rs.getString("ime");
+            String pol = rs.getString("pol");
+            String mobilni = rs.getString("mobilni");
+            String fiksni = rs.getString("fiksni");
+            int ur = rs.getInt("ukupanRezultat");
+
             Kandidat kandidat = new Kandidat();
             kandidat.setUkupanBrojPoena(ur);
             kandidat.setFiksni(fiksni);
@@ -852,12 +853,12 @@ public class DBBroker {
             srl.setBrojPoena(poeni);
             stavke.add(srl);
         }
-        
+
         return stavke;
     }
 
     public void ubaciObavestenje(String[] obavestenje) throws SQLException {
-         String upit = "INSERT INTO obavestenje(text,naslov) VALUES(?,?)";
+        String upit = "INSERT INTO obavestenje(text,naslov) VALUES(?,?)";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ps.setString(1, obavestenje[0]);
         ps.setString(2, obavestenje[1]);
@@ -867,10 +868,10 @@ public class DBBroker {
 
     public Rang_Lista vratiKonkretnuListu(String smer) throws SQLException {
         Rang_Lista rl = null;
-        String upit = "select * from rang_lista where smer='"+smer+"'";
+        String upit = "select * from rang_lista where smer='" + smer + "'";
         Statement st = konekcija.createStatement();
         ResultSet rs = st.executeQuery(upit);
-        while(rs.next()){
+        while (rs.next()) {
             int id = rs.getInt("rlID");
             int godina = rs.getInt("godina");
             String naziv = rs.getString("smer");
@@ -880,7 +881,38 @@ public class DBBroker {
         }
         return rl;
     }
-    
-    
+
+    public Kandidat vratiKandidata1(String email) throws SQLException {
+        String upit = "SELECT * from usertable WHERE email='" + email + "'";
+        Kandidat kandidat = null;
+        Statement st = konekcija.createStatement();
+        ResultSet rs = st.executeQuery(upit);
+
+        while (rs.next()) {
+            String ime = rs.getString(2);
+            String prezime = rs.getString(3);
+            String email1 = rs.getString(4);
+            String imeRoditelja = rs.getString(8);
+            String jmbg = rs.getString(9);
+            String pol = rs.getString(10);
+            String mobilni = rs.getString(11);
+            String fiksni = rs.getString(12);
+
+            kandidat = new Kandidat();
+            kandidat.setIme(ime);
+            kandidat.setPrezime(prezime);
+            kandidat.setEmail(email1);
+            kandidat.setImeRoditelja(imeRoditelja);
+            kandidat.setJmbg(jmbg);
+            kandidat.setPol(pol);
+            kandidat.setMobilni(mobilni);
+            kandidat.setFiksni(fiksni);
+
+        }
+        rs.close();
+        st.close();
+
+        return kandidat;
+    }
 
 }

@@ -554,9 +554,9 @@ public class ObradiZahtev extends Thread {
                          String[] obavestenje =  (String[]) kz.getParametar();
                          boolean ubacen = Kontroler.getInstance().ubaciObavestenje(obavestenje);
                          if(ubacen) {
-                             so.setPoruka("Uspesno");
+                             so.setPoruka("Uspesno sacuvano obavestenje!");
                          } else {
-                             so.setPoruka("Neuspesno");
+                             so.setPoruka("Neuspesno sacuvano obavestenje!");
                          }
                     
                     break;
@@ -568,6 +568,19 @@ public class ObradiZahtev extends Thread {
                          }else{
                              so.setPoruka("Uspesno");}
                          break;
+                         case Operacije.VRATI_KANDIDATA_ZA_VERIFIKACIJU:
+                    String email = (String) kz.getParametar();
+                    Kandidat kandidat1 = Kontroler.getInstance().vratiKandidataVer(email);
+                    if (kandidat1!= null) {
+
+                        so.setPoruka("Kandidat je pronadjen pod zadatim e-mail-om!");
+                        so.setOdgovor(kandidat1);
+                        
+                    } else {
+                        so.setPoruka("Kandidat nije pronadjen pod zadatim e-mail-om ");
+
+                    }
+                    break;
 
             }
             posaljiSO(so);

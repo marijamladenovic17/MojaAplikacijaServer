@@ -1104,4 +1104,28 @@ public class Kontroler {
         return so;
     }
 
+    public Kandidat vratiKandidataVer(String email) {
+         Kandidat kan = null;
+
+        try {
+            db.ucitajDriver();
+            db.otvoriKonekciju("email_validation");
+            kan = db.vratiKandidata1(email);
+        } catch (ClassNotFoundException ex) {
+            kan = null;
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            kan = null;
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+
+        } finally {
+            try {
+                db.zatvoriKonekciju();
+            } catch (SQLException ex) {
+                Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return kan;
+    }
+
 }
